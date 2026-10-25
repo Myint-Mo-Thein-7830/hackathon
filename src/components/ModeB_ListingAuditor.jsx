@@ -75,16 +75,19 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
   return (
     <div className="space-y-6 bg-transparent">
       {/* Rebranded Hero Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-2 pt-2 bg-transparent">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
+      <div className="text-center max-w-3xl mx-auto space-y-3 pt-2 bg-transparent">
+        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-800/50 text-xs font-semibold">
           <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
           <span>Smart Rental Living Assistant</span>
         </div>
-        <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          Find & Evaluate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-500 to-indigo-600 dark:from-emerald-400 dark:via-teal-300 dark:to-indigo-400">Ideal Rental Accommodation</span>
+        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white text-center">
+          Find & Evaluate Your{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-400 dark:to-teal-300">
+            Ideal Rental Accommodation
+          </span>
         </h1>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
-          Transparent cost calculations, fair lease verification, and pre-screened rooms tailored for students and young professionals.
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto">
+          Transparent cost calculations, fair lease verification, and pre-screened rooms tailored for students and young professionals across Bangkok.
         </p>
       </div>
 
@@ -177,7 +180,7 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
               value={propertyName}
               onChange={(e) => setPropertyName(e.target.value)}
               placeholder="e.g. Ideo Sukhumvit 93 or Dorm near KMUTT campus"
-              className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 shadow-sm"
+              className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
             />
           </div>
 
@@ -195,10 +198,10 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                   if (depositMonths === 1) setDepositMonths(2);
                   setElectricBillingType('direct_mea');
                 }}
-                className={`flex items-center justify-center space-x-2 py-2.5 px-3 rounded-lg text-xs font-bold transition-all ${
+                className={`flex items-center justify-center space-x-2 py-2.5 px-3 rounded-lg text-xs font-semibold transition-all ${
                   propertyType === 'condo'
-                    ? 'bg-indigo-600 text-white shadow-md'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    ? 'bg-emerald-600 text-white font-semibold shadow-md'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
                 }`}
               >
                 <Building2 className="w-4 h-4" />
@@ -213,10 +216,10 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                   if (depositMonths === 2) setDepositMonths(1);
                   setElectricBillingType('submeter_flat');
                 }}
-                className={`flex items-center justify-center space-x-2 py-2.5 px-3 rounded-lg text-xs font-bold transition-all ${
+                className={`flex items-center justify-center space-x-2 py-2.5 px-3 rounded-lg text-xs font-semibold transition-all ${
                   propertyType === 'apartment'
-                    ? 'bg-emerald-600 text-white shadow-md'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    ? 'bg-emerald-600 text-white font-semibold shadow-md'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
                 }`}
               >
                 <Home className="w-4 h-4" />
@@ -237,7 +240,7 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                     key={chip}
                     type="button"
                     onClick={() => setRent(chip)}
-                    className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-transparent transition-colors"
+                    className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 transition-colors"
                   >
                     {chip.toLocaleString()}
                   </button>
@@ -253,9 +256,9 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                 step="500"
                 value={rent}
                 onChange={(e) => setRent(Number(e.target.value))}
-                className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm font-mono text-slate-900 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 text-sm font-mono shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
-              <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-mono text-slate-400">
+              <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-mono text-slate-500 dark:text-slate-400">
                 THB / mo
               </span>
             </div>
@@ -270,7 +273,7 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
               id="select-deposit"
               value={depositMonths}
               onChange={(e) => setDepositMonths(Number(e.target.value))}
-              className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-slate-900 dark:text-slate-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 text-xs sm:text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
               <option value={1}>1 Month Deposit (Standard for Apartments/Dorms)</option>
               <option value={2}>2 Months Deposit (Standard for Condominiums)</option>
@@ -287,10 +290,10 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
               <button
                 type="button"
                 onClick={() => setAdvancePaymentTiming('advance')}
-                className={`py-2 px-2 rounded-lg text-xs font-medium transition-all ${
+                className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all ${
                   advancePaymentTiming === 'advance'
-                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
                 }`}
               >
                 Advance at Month Start
@@ -298,10 +301,10 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
               <button
                 type="button"
                 onClick={() => setAdvancePaymentTiming('end_of_month')}
-                className={`py-2 px-2 rounded-lg text-xs font-medium transition-all ${
+                className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all ${
                   advancePaymentTiming === 'end_of_month'
-                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
                 }`}
               >
                 Pay at End of Month

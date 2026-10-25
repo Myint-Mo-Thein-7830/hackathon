@@ -120,9 +120,9 @@ export default function SafetyScorecard({ auditResult }) {
       <InquiryCopilot script={inquiryScript} propertyType={propertyType} />
 
       {/* Domain Logic Transparency Card */}
-      <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs text-slate-400 space-y-2">
-        <div className="flex items-center space-x-2 text-slate-300 font-semibold">
-          <Info className="w-4 h-4 text-indigo-400" />
+      <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+        <div className="flex items-center space-x-2 text-slate-800 dark:text-slate-300 font-semibold">
+          <Info className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           <span>Why Property Type Calibration Matters</span>
         </div>
         <p className="text-[11px] leading-relaxed">
