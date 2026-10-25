@@ -3,7 +3,7 @@ import { ShieldCheck, Search, Calculator, Sun, Moon } from 'lucide-react';
 
 export default function Navbar({ activeMode, setActiveMode, theme, toggleTheme }) {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/80 backdrop-blur-md transition-colors duration-200">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo & Brand */}
@@ -21,7 +21,7 @@ export default function Navbar({ activeMode, setActiveMode, theme, toggleTheme }
                   Rental Assistant
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Smart Accommodation & Rental Living Assistant</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400 hidden sm:block">Smart Accommodation & Rental Living Assistant</p>
             </div>
           </div>
 

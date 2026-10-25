@@ -40,12 +40,12 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-white transition-colors duration-200">
+    <div className={`min-h-screen ${theme === 'dark' ? 'dark bg-slate-950 text-slate-100' : 'bg-white text-slate-900'} flex flex-col selection:bg-emerald-500 selection:text-white transition-colors duration-200`}>
       {/* Background Ambience Gradients */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-500/5 dark:bg-indigo-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 -right-40 w-96 h-96 bg-teal-500/5 dark:bg-emerald-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 left-1/3 w-96 h-96 bg-emerald-500/5 dark:bg-indigo-500/5 rounded-full blur-3xl"></div>
+        <div className={`absolute -top-40 -left-40 w-96 h-96 rounded-full blur-3xl transition-opacity duration-300 ${theme === 'dark' ? 'bg-indigo-500/10' : 'bg-emerald-500/5'}`}></div>
+        <div className={`absolute top-1/3 -right-40 w-96 h-96 rounded-full blur-3xl transition-opacity duration-300 ${theme === 'dark' ? 'bg-emerald-500/10' : 'bg-teal-500/5'}`}></div>
+        <div className={`absolute -bottom-40 left-1/3 w-96 h-96 rounded-full blur-3xl transition-opacity duration-300 ${theme === 'dark' ? 'bg-indigo-500/5' : 'bg-emerald-500/5'}`}></div>
       </div>
 
       {/* Main Navigation */}
@@ -57,11 +57,11 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+      <main className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 bg-transparent">
         {activeMode === 'browse' ? (
           <ModeA_RoomBrowser onSwitchToEvaluate={() => setActiveMode('evaluate')} />
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-8 bg-transparent">
             <ModeB_ListingAuditor 
               onAuditResult={setAuditResult} 
               auditResult={auditResult} 
@@ -76,7 +76,7 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors duration-200">
+      <footer className={`border-t ${theme === 'dark' ? 'border-slate-800 bg-slate-950 text-slate-500' : 'border-slate-200 bg-white text-slate-500'} py-6 mt-12 text-center text-xs transition-colors duration-200`}>
         <p>SafeRoom — Smart Accommodation & Rental Living Assistant | Devpost: Build With AI</p>
       </footer>
     </div>

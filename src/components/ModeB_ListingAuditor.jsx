@@ -73,9 +73,9 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-transparent">
       {/* Rebranded Hero Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-2 pt-2">
+      <div className="text-center max-w-3xl mx-auto space-y-2 pt-2 bg-transparent">
         <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
           <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
           <span>Smart Rental Living Assistant</span>
