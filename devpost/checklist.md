@@ -19,7 +19,7 @@ Build mode: fast
   Learner check: Open `http://localhost:5173/`, click the "Sample: Predatory Apartment" chip, verify the text populates and analysis runs without error.
   Commit: `feat: bootstrap app and implement Mode B outside listing audit engine`
 
-- [ ] **2. Unified Safety Scorecard with Risk Gauge, True Cost Calculator, Red-Flag Heatmap, and Copilot**
+- [x] **2. Unified Safety Scorecard with Risk Gauge, True Cost Calculator, Red-Flag Heatmap, and Copilot**
   Becomes usable: The full visual inspection scorecard renders upon analysis: the animated 0–100% Risk Gauge (Crimson for 30% hazard vs Emerald for 95% safe), True Upfront Cash & Monthly Outflow Breakdown (with MEA progressive tiers vs flat sub-meter rates), Red-Flag hazard badges, and the Landlord Inquiry Copilot with a functioning 1-click clipboard copy.
   Why now: Completes the star demo flow end-to-end, delivering the core value proposition and judge "aha!" moment.
   PRD ref: `prd.md > The Core Journey` (steps 3–4), `prd.md > Unified Safety Scorecard`

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import ModeB_ListingAuditor from './components/ModeB_ListingAuditor';
+import SafetyScorecard from './components/SafetyScorecard';
 import { analyzeListing, SAMPLE_PREDATORY_APARTMENT } from './services/analyzer';
-import { ShieldCheck, AlertOctagon, CheckCircle2, AlertTriangle, ArrowRight, DollarSign, Zap } from 'lucide-react';
 
 export default function App() {
   const [activeMode, setActiveMode] = useState('audit'); // 'audit' | 'browse'
@@ -35,92 +35,9 @@ export default function App() {
               auditResult={auditResult} 
             />
 
-            {/* Preliminary Metrics Viewer (Enhanced in Slice 2 to full Scorecard) */}
+            {/* Complete Unified Safety Scorecard */}
             {auditResult && (
-              <section id="audit-results-preview" className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
-                  <div className="flex items-center space-x-3">
-                    <div className={`p-2.5 rounded-xl border ${
-                      auditResult.riskLevel === 'hazard'
-                        ? 'bg-red-500/10 border-red-500/30 text-red-400'
-                        : auditResult.riskLevel === 'caution'
-                        ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-                        : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                    }`}>
-                      {auditResult.riskLevel === 'hazard' ? (
-                        <AlertOctagon className="w-6 h-6" />
-                      ) : auditResult.riskLevel === 'caution' ? (
-                        <AlertTriangle className="w-6 h-6" />
-                      ) : (
-                        <ShieldCheck className="w-6 h-6" />
-                      )}
-                    </div>
-                    <div>
-                      <div className="flex items-center space-x-2">
-                        <h2 className="text-lg font-bold text-white">
-                          {auditResult.riskLevel === 'hazard'
-                            ? 'High Scam / Exploitation Hazard'
-                            : auditResult.riskLevel === 'caution'
-                            ? 'Review Recommended'
-                            : 'Verified Safe Listing'}
-                        </h2>
-                        <span className={`px-2 py-0.5 rounded text-xs font-extrabold uppercase font-mono ${
-                          auditResult.riskLevel === 'hazard'
-                            ? 'bg-red-900/80 text-red-200 border border-red-700/50'
-                            : auditResult.riskLevel === 'caution'
-                            ? 'bg-amber-900/80 text-amber-200 border border-amber-700/50'
-                            : 'bg-emerald-900/80 text-emerald-200 border border-emerald-700/50'
-                        }`}>
-                          Score: {auditResult.score}/100
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-400">
-                        Audited under <span className="capitalize font-semibold text-slate-300">{auditResult.propertyType}</span> standard
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-4 text-xs font-mono">
-                    <div className="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-                      <span className="text-slate-400">Upfront Cash: </span>
-                      <span className="text-white font-bold">{auditResult.upfrontCash.toLocaleString()} THB</span>
-                    </div>
-                    <div className="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-                      <span className="text-slate-400">Est. Monthly: </span>
-                      <span className="text-white font-bold">{auditResult.monthlyTotalEst.toLocaleString()} THB</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Detected Red Flags list */}
-                <div className="space-y-2">
-                  <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                    Detected Safety Flags ({auditResult.redFlags.length})
-                  </h3>
-                  {auditResult.redFlags.length === 0 ? (
-                    <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-center space-x-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                      <span>No predatory clauses detected. All terms align with standard legal and market baselines.</span>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {auditResult.redFlags.map((flag, idx) => (
-                        <div key={idx} className={`p-3 rounded-xl border text-xs space-y-1 ${
-                          flag.severity === 'hazard'
-                            ? 'bg-red-500/10 border-red-500/30 text-red-200'
-                            : 'bg-amber-500/10 border-amber-500/30 text-amber-200'
-                        }`}>
-                          <div className="font-bold flex items-center space-x-1.5">
-                            <span className="w-2 h-2 rounded-full bg-current"></span>
-                            <span>{flag.title}</span>
-                          </div>
-                          <p className="text-slate-300 text-[11px] leading-relaxed">{flag.description}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </section>
+              <SafetyScorecard auditResult={auditResult} />
             )}
           </div>
         ) : (
