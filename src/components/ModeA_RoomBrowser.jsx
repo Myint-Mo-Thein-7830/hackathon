@@ -1,13 +1,15 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Search, 
-  SlidersHorizontal, 
   Building2, 
   Home, 
   X, 
   ShieldCheck, 
   RotateCcw,
-  Sparkles
+  MapPin,
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { MOCK_LISTINGS } from '../data/mockListings';
 import RoomCard from './RoomCard';
@@ -15,34 +17,56 @@ import SafetyScorecard from './SafetyScorecard';
 
 export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [propertyFilter, setPropertyFilter] = useState('all'); // 'all' | 'condo' | 'apartment'
-  const [maxBudget, setMaxBudget] = useState(15000);
+  const [propertyFilter, setPropertyFilter] = useState('All'); // 'All' | 'Condo' | 'Dorm'
+  const [maxRent, setMaxRent] = useState(16000);
   const [selectedRoom, setSelectedRoom] = useState(null);
 
-  // Filter logic
-  const filteredRooms = useMemo(() => {
-    return MOCK_LISTINGS.filter(room => {
-      // Search match
-      const query = searchQuery.toLowerCase().trim();
-      const matchesSearch = !query || 
-        room.title.toLowerCase().includes(query) || 
-        room.location.toLowerCase().includes(query) ||
-        room.description.toLowerCase().includes(query);
+  // Pagination state (6 items per page)
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
-      // Property type match
-      const matchesType = propertyFilter === 'all' || room.propertyType === propertyFilter;
+  // Filter logic covering all of Bangkok
+  const filteredListings = useMemo(() => {
+    return MOCK_LISTINGS.filter((item) => {
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        (item.name && item.name.toLowerCase().includes(q)) ||
+        (item.title && item.title.toLowerCase().includes(q)) ||
+        (item.district && item.district.toLowerCase().includes(q)) ||
+        (item.address && item.address.toLowerCase().includes(q)) ||
+        (item.landmark && item.landmark.toLowerCase().includes(q)) ||
+        (item.transit && item.transit.toLowerCase().includes(q));
 
-      // Price match
-      const matchesPrice = room.baseRent <= maxBudget;
+      const matchesType =
+        propertyFilter === 'All' ||
+        (propertyFilter === 'Condo' && (item.type === 'Condominium' || item.propertyType === 'condo')) ||
+        (propertyFilter === 'Dorm' && (item.type?.includes('Apartment') || item.propertyType === 'apartment'));
+
+      const price = item.rent || item.baseRent;
+      const matchesPrice = price <= maxRent;
 
       return matchesSearch && matchesType && matchesPrice;
     });
-  }, [searchQuery, propertyFilter, maxBudget]);
+  }, [searchQuery, propertyFilter, maxRent]);
+
+  // Reset pagination to page 1 whenever filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, propertyFilter, maxRent]);
+
+  // Paginated items
+  const totalPages = Math.ceil(filteredListings.length / itemsPerPage) || 1;
+  const paginatedListings = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredListings.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredListings, currentPage]);
 
   const handleResetFilters = () => {
     setSearchQuery('');
-    setPropertyFilter('all');
-    setMaxBudget(15000);
+    setPropertyFilter('All');
+    setMaxRent(16000);
+    setCurrentPage(1);
   };
 
   return (
@@ -51,13 +75,13 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
       <div className="text-center max-w-3xl mx-auto space-y-2 pt-2">
         <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Pre-Screened Bangkok Accommodations</span>
+          <span>Greater Bangkok Pre-Screened Directory</span>
         </div>
         <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
           Find & Evaluate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-indigo-400">Ideal Rental Accommodation</span>
         </h1>
         <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto">
-          Transparent cost calculations, fair lease verification, and pre-screened rooms tailored for students and young professionals.
+          Transparent cost calculations, fair lease verification, and pre-screened rooms tailored for students and young professionals across Bangkok.
         </p>
 
         {/* Callout Banner to Companion Tool */}
@@ -74,18 +98,19 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
         </div>
       </div>
 
-      {/* Filter & Search Bar */}
+      {/* Dynamic Search & Filter Bar */}
       <div className="glass-panel rounded-2xl p-4 sm:p-6 shadow-xl border border-slate-800 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-          {/* Search Box (6 cols) */}
+          {/* Universal Search Input (5 cols) */}
           <div className="md:col-span-5 relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
+              id="search-accommodations-input"
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by campus, MRT, BTS, or building name..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/80 transition-all"
+              placeholder="Search any district, transit, campus (KMUTT, Ari, Rama 9, Sukhumvit)..."
+              className="w-full pl-10 pr-8 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/80 transition-all"
             />
             {searchQuery && (
               <button 
@@ -100,9 +125,10 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
           {/* Property Type Filter (4 cols) */}
           <div className="md:col-span-4 flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
             <button
-              onClick={() => setPropertyFilter('all')}
+              id="filter-type-all"
+              onClick={() => setPropertyFilter('All')}
               className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all text-center ${
-                propertyFilter === 'all'
+                propertyFilter === 'All'
                   ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
@@ -110,10 +136,10 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
               All Types
             </button>
             <button
-              id="filter-condos-tab"
-              onClick={() => setPropertyFilter('condo')}
+              id="filter-type-condos"
+              onClick={() => setPropertyFilter('Condo')}
               className={`flex-1 flex items-center justify-center space-x-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${
-                propertyFilter === 'condo'
+                propertyFilter === 'Condo'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
@@ -122,10 +148,10 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
               <span>Condos</span>
             </button>
             <button
-              id="filter-apartments-tab"
-              onClick={() => setPropertyFilter('apartment')}
+              id="filter-type-dorms"
+              onClick={() => setPropertyFilter('Dorm')}
               className={`flex-1 flex items-center justify-center space-x-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${
-                propertyFilter === 'apartment'
+                propertyFilter === 'Dorm'
                   ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
@@ -139,47 +165,61 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
           <div className="md:col-span-3 space-y-1 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
             <div className="flex justify-between items-center text-[11px] font-mono">
               <span className="text-slate-400">Max Rent:</span>
-              <span className="text-emerald-400 font-bold">{maxBudget.toLocaleString()} THB</span>
+              <span className="text-emerald-400 font-bold">{maxRent.toLocaleString()} THB</span>
             </div>
             <input
               type="range"
               min="4000"
-              max="15000"
+              max="20000"
               step="500"
-              value={maxBudget}
-              onChange={(e) => setMaxBudget(parseInt(e.target.value, 10))}
+              value={maxRent}
+              onChange={(e) => setMaxRent(parseInt(e.target.value, 10))}
               className="w-full accent-emerald-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
             />
           </div>
         </div>
 
-        {/* Results Count & Reset row */}
-        <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-800/80">
-          <div className="text-slate-400">
-            Showing <span className="font-bold text-white">{filteredRooms.length}</span> of {MOCK_LISTINGS.length} pre-vetted rooms
+        {/* Results Count & Quick Location Badges */}
+        <div className="flex flex-wrap items-center justify-between gap-2 text-xs pt-2 border-t border-slate-800/80">
+          <div className="text-slate-400 flex items-center space-x-2">
+            <span>
+              Showing <span className="font-bold text-white">{filteredListings.length}</span> verified accommodations in Bangkok
+            </span>
           </div>
 
-          {(searchQuery || propertyFilter !== 'all' || maxBudget < 15000) && (
-            <button
-              onClick={handleResetFilters}
-              className="text-xs text-slate-400 hover:text-slate-200 flex items-center space-x-1 transition-colors"
-            >
-              <RotateCcw className="w-3 h-3" />
-              <span>Reset Filters</span>
-            </button>
-          )}
+          <div className="flex items-center space-x-2">
+            <span className="text-[11px] text-slate-500 hidden sm:inline">Popular Hubs:</span>
+            {['KMUTT', 'Ari', 'Sukhumvit', 'Rama 9'].map(hub => (
+              <button
+                key={hub}
+                onClick={() => setSearchQuery(hub)}
+                className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-colors"
+              >
+                {hub}
+              </button>
+            ))}
+            {(searchQuery || propertyFilter !== 'All' || maxRent < 16000) && (
+              <button
+                onClick={handleResetFilters}
+                className="text-xs text-slate-400 hover:text-slate-200 flex items-center space-x-1 ml-2 transition-colors"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>Reset</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Room Cards Grid */}
-      {filteredRooms.length === 0 ? (
+      {/* Accommodations Grid */}
+      {paginatedListings.length === 0 ? (
         <div className="text-center py-16 glass-panel rounded-2xl border border-slate-800 space-y-3">
           <div className="p-3 rounded-full bg-slate-900 w-12 h-12 mx-auto flex items-center justify-center text-slate-500">
             <Search className="w-6 h-6" />
           </div>
-          <h3 className="font-bold text-white text-base">No Matching Rooms Found</h3>
+          <h3 className="font-bold text-white text-base">No Matching Accommodations Found</h3>
           <p className="text-xs text-slate-400 max-w-sm mx-auto">
-            Try adjusting your search keywords, raising your budget limit, or changing the property type filter.
+            Try adjusting your search terms, raising your maximum rent budget, or resetting filters.
           </p>
           <button
             onClick={handleResetFilters}
@@ -190,7 +230,7 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredRooms.map(room => (
+          {paginatedListings.map(room => (
             <RoomCard
               key={room.id}
               room={room}
@@ -200,46 +240,109 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
         </div>
       )}
 
-      {/* Modal: Full Safety Scorecard Inspection for Pre-Vetted Room */}
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center space-x-3 pt-4">
+          <button
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className={`p-2 rounded-xl border flex items-center space-x-1 text-xs font-semibold transition-all ${
+              currentPage === 1
+                ? 'bg-slate-900/50 border-slate-800 text-slate-600 cursor-not-allowed'
+                : 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white'
+            }`}
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span className="hidden sm:inline">Previous</span>
+          </button>
+
+          <div className="flex items-center space-x-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
+              <button
+                key={pageNum}
+                onClick={() => setCurrentPage(pageNum)}
+                className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
+                  currentPage === pageNum
+                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/20'
+                    : 'bg-slate-900/80 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-white'
+                }`}
+              >
+                {pageNum}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className={`p-2 rounded-xl border flex items-center space-x-1 text-xs font-semibold transition-all ${
+              currentPage === totalPages
+                ? 'bg-slate-900/50 border-slate-800 text-slate-600 cursor-not-allowed'
+                : 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white'
+            }`}
+          >
+            <span className="hidden sm:inline">Next</span>
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Modal: Full Safety Scorecard Inspection for Pre-Screened Room */}
       {selectedRoom && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
           <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-slate-950 border border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6">
-            {/* Modal Close Button */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-              <div className="flex items-center space-x-2">
-                <span className="p-1 rounded-lg bg-emerald-500/10 text-emerald-400">
-                  <ShieldCheck className="w-5 h-5" />
+            {/* Modal Header */}
+            <div className="flex items-start justify-between pb-4 border-b border-slate-800">
+              <div className="flex items-start space-x-3">
+                <span className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 mt-1">
+                  <ShieldCheck className="w-6 h-6" />
                 </span>
                 <div>
-                  <h3 className="font-bold text-lg text-white">{selectedRoom.title}</h3>
-                  <p className="text-xs text-slate-400">{selectedRoom.location}</p>
+                  <h3 className="font-extrabold text-xl text-white">{selectedRoom.name || selectedRoom.title}</h3>
+                  <p className="text-xs text-indigo-300 font-medium">{selectedRoom.landmark} • {selectedRoom.district}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{selectedRoom.address}</p>
                 </div>
               </div>
 
-              <button
-                id="close-room-modal-btn"
-                onClick={() => setSelectedRoom(null)}
-                className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center space-x-2">
+                {selectedRoom.googleMapsUrl && (
+                  <a
+                    href={selectedRoom.googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white text-xs font-medium flex items-center space-x-1 transition-colors"
+                  >
+                    <MapPin className="w-4 h-4 text-red-400" />
+                    <span className="hidden sm:inline">Google Maps</span>
+                    <ExternalLink className="w-3 h-3 text-slate-500" />
+                  </a>
+                )}
+                <button
+                  id="close-room-modal-btn"
+                  onClick={() => setSelectedRoom(null)}
+                  className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* Mount Full Unified Safety Scorecard */}
             <SafetyScorecard
               auditResult={{
                 score: selectedRoom.safetyScore,
-                riskLevel: selectedRoom.riskLevel,
-                propertyType: selectedRoom.propertyType,
-                detectedRent: selectedRoom.baseRent,
+                riskLevel: selectedRoom.riskLevel || (selectedRoom.safetyScore >= 80 ? 'safe' : 'caution'),
+                propertyType: (selectedRoom.type === 'Condominium' || selectedRoom.propertyType === 'condo') ? 'condo' : 'apartment',
+                propertyName: selectedRoom.name || selectedRoom.title,
+                detectedRent: selectedRoom.rent || selectedRoom.baseRent,
                 depositMonths: selectedRoom.depositMonths,
-                upfrontCash: selectedRoom.upfrontCash,
-                electricRate: selectedRoom.electricRatePerUnit,
-                electricBillingType: selectedRoom.electricBillingType,
-                monthlyElectricEst: selectedRoom.monthlyElectricEst,
-                monthlyTotalEst: selectedRoom.monthlyTotalEst,
-                gougeDeltaMonthly: selectedRoom.gougeDeltaMonthly,
-                redFlags: selectedRoom.redFlags,
+                upfrontCash: selectedRoom.totalMoveInCash || selectedRoom.upfrontCash,
+                electricRate: selectedRoom.isGovernmentMeter ? null : (selectedRoom.electricityRate || selectedRoom.electricRatePerUnit),
+                electricBillingType: selectedRoom.isGovernmentMeter ? 'direct_mea' : 'submeter_flat',
+                monthlyElectricEst: selectedRoom.monthlyElectricEst || (selectedRoom.isGovernmentMeter ? 1125 : Math.round(250 * selectedRoom.electricityRate)),
+                monthlyTotalEst: selectedRoom.monthlyTotalEst || ((selectedRoom.rent || selectedRoom.baseRent) + (selectedRoom.isGovernmentMeter ? 1125 : Math.round(250 * selectedRoom.electricityRate)) + 200),
+                gougeDeltaMonthly: selectedRoom.gougeDeltaMonthly || 0,
+                redFlags: selectedRoom.redFlags || [],
                 inquiryScript: selectedRoom.inquiryScript
               }}
             />
