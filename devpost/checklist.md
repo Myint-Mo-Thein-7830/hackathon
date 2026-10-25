@@ -29,7 +29,7 @@ Build mode: fast
   Learner check: Click "Sample: Predatory Apartment", observe the red hazard gauge and +750 THB/month penalty delta, and click "Copy Script" to verify the clipboard alert. Then click "Sample: Fair Student Condo" and see it flip to green safe.
   Commit: `feat: implement Unified Safety Scorecard, cost calculator, and inquiry copilot`
 
-- [ ] **3. Mode A Pre-Vetted Safe Room Browser with Filters and Inspection Modals**
+- [x] **3. Mode A Pre-Vetted Safe Room Browser with Filters and Inspection Modals**
   Becomes usable: The complete Dual-Door experience: users can toggle to "Browse Safe Rooms", filter curated listings by Property Type (`Condo` vs `Apartment/Dorm`) and Max Budget, view transparent utility/deposit badges, and click "Inspect Room" to open the verified Safety Scorecard modal.
   Why now: Completes the full dual-mode journey specified in the PRD, making the app a complete product experience for both searchers and auditors.
   PRD ref: `prd.md > The Core Journey` (step 5), `prd.md > Mode A: Browse Pre-Vetted Safe Rooms`
@@ -41,7 +41,7 @@ Build mode: fast
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored — after Slice 2 (Mode B outside listing audit & complete scorecard demo flow)
+- [x] Early usable behavior explored — after Slice 2 (Mode B outside listing audit & complete scorecard demo flow)
 - [ ] Final kick-the-tires exploration and feedback completed — after Slice 3 (Full dual-door app)
 
 ## Final Review

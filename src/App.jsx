@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import ModeB_ListingAuditor from './components/ModeB_ListingAuditor';
+import ModeA_RoomBrowser from './components/ModeA_RoomBrowser';
 import SafetyScorecard from './components/SafetyScorecard';
 import { analyzeListing, SAMPLE_PREDATORY_APARTMENT } from './services/analyzer';
 
@@ -41,16 +42,7 @@ export default function App() {
             )}
           </div>
         ) : (
-          <div className="text-center py-20 space-y-3">
-            <h2 className="text-xl font-bold text-white">Mode A: Browse Safe Rooms</h2>
-            <p className="text-sm text-slate-400">Pre-vetted room catalog will be mounted in Slice 3.</p>
-            <button
-              onClick={() => setActiveMode('audit')}
-              className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-xs font-semibold"
-            >
-              Back to Audit Listing
-            </button>
-          </div>
+          <ModeA_RoomBrowser />
         )}
       </main>
 
