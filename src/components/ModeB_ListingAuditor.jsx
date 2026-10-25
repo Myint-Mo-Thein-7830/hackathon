@@ -76,28 +76,28 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
     <div className="space-y-6">
       {/* Rebranded Hero Header */}
       <div className="text-center max-w-3xl mx-auto space-y-2 pt-2">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold">
-          <Sparkles className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
           <span>Smart Rental Living Assistant</span>
         </div>
-        <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-          Find & Evaluate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-teal-300 to-emerald-400">Ideal Rental Accommodation</span>
+        <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          Find & Evaluate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-500 to-indigo-600 dark:from-emerald-400 dark:via-teal-300 dark:to-indigo-400">Ideal Rental Accommodation</span>
         </h1>
-        <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto">
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
           Transparent cost calculations, fair lease verification, and pre-screened rooms tailored for students and young professionals.
         </p>
       </div>
 
       {/* 3 1-Click Demo Buttons */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800/80">
-          <div className="flex items-center space-x-2 text-xs font-bold text-slate-300">
-            <Zap className="w-4 h-4 text-amber-400" />
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100 dark:border-slate-800/80">
+          <div className="flex items-center space-x-2 text-xs font-bold text-slate-700 dark:text-slate-300">
+            <Zap className="w-4 h-4 text-amber-500 dark:text-amber-400" />
             <span>1-Click Lease Demo Scenarios (Instant Auto-Fill):</span>
           </div>
           <button
             onClick={handleReset}
-            className="text-xs text-slate-500 hover:text-slate-300 flex items-center space-x-1 transition-colors self-start sm:self-auto"
+            className="text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 flex items-center space-x-1 transition-colors self-start sm:self-auto"
           >
             <RotateCcw className="w-3 h-3" />
             <span>Reset Form</span>
@@ -109,13 +109,13 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
           <button
             id="preset-budget-dorm"
             onClick={() => loadPreset('budgetDorm')}
-            className="p-3.5 rounded-xl bg-slate-950/70 hover:bg-slate-950 border border-emerald-500/30 hover:border-emerald-500/60 transition-all text-left shadow-sm group hover:shadow-emerald-500/10"
+            className="p-3.5 rounded-xl bg-emerald-50/60 hover:bg-emerald-50 dark:bg-slate-950/70 dark:hover:bg-slate-950 border border-emerald-200 dark:border-emerald-500/30 hover:border-emerald-400 dark:hover:border-emerald-500/60 transition-all text-left shadow-sm group"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-300">Sample 1: Budget Dorm</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 font-mono">Fair</span>
+              <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Sample 1: Budget Dorm</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 font-mono">Fair</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-1 leading-snug">
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1 leading-snug">
               Pracha Uthit Dorm (4,500 THB rent, 1+1 deposit, 7 THB sub-meter)
             </p>
           </button>
@@ -124,13 +124,13 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
           <button
             id="preset-luxury-condo"
             onClick={() => loadPreset('luxuryCondo')}
-            className="p-3.5 rounded-xl bg-slate-950/70 hover:bg-slate-950 border border-indigo-500/30 hover:border-indigo-500/60 transition-all text-left shadow-sm group hover:shadow-indigo-500/10"
+            className="p-3.5 rounded-xl bg-indigo-50/60 hover:bg-indigo-50 dark:bg-slate-950/70 dark:hover:bg-slate-950 border border-indigo-200 dark:border-indigo-500/30 hover:border-indigo-400 dark:hover:border-indigo-500/60 transition-all text-left shadow-sm group"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-indigo-300">Sample 2: Transit Condo</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-300 border border-indigo-800 font-mono">Fair</span>
+              <span className="text-xs font-bold text-indigo-800 dark:text-indigo-300">Sample 2: Transit Condo</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-800 dark:text-indigo-300 border border-indigo-300 dark:border-indigo-800 font-mono">Fair</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-1 leading-snug">
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1 leading-snug">
               Ideo Sukhumvit 93 (13,000 THB rent, 2+1 deposit, direct MEA meter)
             </p>
           </button>
@@ -139,13 +139,13 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
           <button
             id="preset-overpriced-unit"
             onClick={() => loadPreset('overpricedUnit')}
-            className="p-3.5 rounded-xl bg-slate-950/70 hover:bg-slate-950 border border-red-500/30 hover:border-red-500/60 transition-all text-left shadow-sm group hover:shadow-red-500/10"
+            className="p-3.5 rounded-xl bg-red-50/60 hover:bg-red-50 dark:bg-slate-950/70 dark:hover:bg-slate-950 border border-red-200 dark:border-red-500/30 hover:border-red-400 dark:hover:border-red-500/60 transition-all text-left shadow-sm group"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-red-300">Sample 3: Overpriced Dorm</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-red-950 text-red-300 border border-red-800 font-mono">High Risk</span>
+              <span className="text-xs font-bold text-red-800 dark:text-red-300">Sample 3: Overpriced Dorm</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-300 border border-red-300 dark:border-red-800 font-mono">High Risk</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-1 leading-snug">
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1 leading-snug">
               Demanding 3-month deposit & 10 THB/unit electricity markup
             </p>
           </button>
@@ -153,22 +153,22 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
       </div>
 
       {/* Structured Multi-Input Lease Questionnaire Form */}
-      <div className="glass-panel rounded-2xl p-6 sm:p-8 shadow-2xl border border-slate-800 space-y-6">
-        <div className="flex items-center space-x-2 pb-4 border-b border-slate-800">
-          <div className="p-2 rounded-xl bg-indigo-600/20 text-indigo-400">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 shadow-sm dark:shadow-xl border border-slate-200 dark:border-slate-800 space-y-6">
+        <div className="flex items-center space-x-2 pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
             <FileCheck className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Lease Terms Questionnaire</h2>
-            <p className="text-xs text-slate-400">Input the key terms from your contract or landlord conversation for an instant evaluation.</p>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Lease Terms Questionnaire</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Input the key terms from your contract or landlord conversation for an instant evaluation.</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Input 1: Property Name or Location */}
           <div className="space-y-2 md:col-span-2">
-            <label className="text-xs font-bold text-slate-300 flex items-center space-x-1.5">
-              <MapPin className="w-3.5 h-3.5 text-indigo-400" />
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center space-x-1.5">
+              <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>1. Property Name or Location</span>
             </label>
             <input
@@ -177,16 +177,16 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
               value={propertyName}
               onChange={(e) => setPropertyName(e.target.value)}
               placeholder="e.g. Ideo Sukhumvit 93 or Dorm near KMUTT campus"
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+              className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 shadow-sm"
             />
           </div>
 
           {/* Input 2: Property Type Segmented Toggle */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-300 flex items-center space-x-1.5">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center space-x-1.5">
               <span>2. Property Type</span>
             </label>
-            <div className="grid grid-cols-2 gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+            <div className="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-slate-950 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
               <button
                 type="button"
                 id="toggle-condo"
@@ -198,7 +198,7 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                 className={`flex items-center justify-center space-x-2 py-2.5 px-3 rounded-lg text-xs font-bold transition-all ${
                   propertyType === 'condo'
                     ? 'bg-indigo-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 <Building2 className="w-4 h-4" />
@@ -216,7 +216,7 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                 className={`flex items-center justify-center space-x-2 py-2.5 px-3 rounded-lg text-xs font-bold transition-all ${
                   propertyType === 'apartment'
                     ? 'bg-emerald-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 <Home className="w-4 h-4" />
@@ -228,7 +228,7 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
           {/* Input 3: Monthly Base Rent */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <label className="text-xs font-bold text-slate-300">
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                 <span>3. Monthly Base Rent (THB)</span>
               </label>
               <div className="flex space-x-1">
@@ -237,7 +237,7 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                     key={chip}
                     type="button"
                     onClick={() => setRent(chip)}
-                    className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+                    className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-transparent transition-colors"
                   >
                     {chip.toLocaleString()}
                   </button>
@@ -253,7 +253,7 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                 step="500"
                 value={rent}
                 onChange={(e) => setRent(Number(e.target.value))}
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sm font-mono text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm font-mono text-slate-900 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
               />
               <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-mono text-slate-400">
                 THB / mo
@@ -263,14 +263,14 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
 
           {/* Input 4: Required Security Deposit */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-300">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
               <span>4. Required Security Deposit</span>
             </label>
             <select
               id="select-deposit"
               value={depositMonths}
               onChange={(e) => setDepositMonths(Number(e.target.value))}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+              className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-slate-900 dark:text-slate-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               <option value={1}>1 Month Deposit (Standard for Apartments/Dorms)</option>
               <option value={2}>2 Months Deposit (Standard for Condominiums)</option>
@@ -280,17 +280,17 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
 
           {/* Input 5: Advance Rent Payment Timing */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-300">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
               <span>5. Advance Rent Payment Timing</span>
             </label>
-            <div className="grid grid-cols-2 gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+            <div className="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-slate-950 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
               <button
                 type="button"
                 onClick={() => setAdvancePaymentTiming('advance')}
                 className={`py-2 px-2 rounded-lg text-xs font-medium transition-all ${
                   advancePaymentTiming === 'advance'
-                    ? 'bg-slate-800 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 Advance at Month Start
@@ -300,8 +300,8 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                 onClick={() => setAdvancePaymentTiming('end_of_month')}
                 className={`py-2 px-2 rounded-lg text-xs font-medium transition-all ${
                   advancePaymentTiming === 'end_of_month'
-                    ? 'bg-slate-800 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 Pay at End of Month
@@ -310,9 +310,9 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
           </div>
 
           {/* Input 6: Electricity Billing Model */}
-          <div className="space-y-3 md:col-span-2 p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <label className="text-xs font-bold text-slate-300 flex items-center space-x-2">
-              <Zap className="w-4 h-4 text-amber-400" />
+          <div className="space-y-3 md:col-span-2 p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center space-x-2">
+              <Zap className="w-4 h-4 text-amber-500 dark:text-amber-400" />
               <span>6. Electricity Billing Model</span>
             </label>
 
@@ -320,8 +320,8 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
               <label 
                 className={`flex items-start space-x-3 p-3 rounded-xl border cursor-pointer transition-all ${
                   electricBillingType === 'direct_mea'
-                    ? 'bg-indigo-950/40 border-indigo-500/60 text-white'
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+                    ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-500/60 text-slate-900 dark:text-white shadow-sm'
+                    : 'bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700'
                 }`}
               >
                 <input
@@ -329,11 +329,11 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                   name="electric-type"
                   checked={electricBillingType === 'direct_mea'}
                   onChange={() => setElectricBillingType('direct_mea')}
-                  className="mt-0.5 accent-indigo-500"
+                  className="mt-0.5 accent-emerald-600"
                 />
                 <div>
-                  <div className="font-bold text-xs text-white">Direct Government Bill (MEA/PEA)</div>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
+                  <div className="font-bold text-xs text-slate-900 dark:text-white">Direct Government Bill (MEA/PEA)</div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                     Official progressive utility meter (~4.5 THB/unit average). Standard for condos.
                   </p>
                 </div>
@@ -342,8 +342,8 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
               <label 
                 className={`flex items-start space-x-3 p-3 rounded-xl border cursor-pointer transition-all ${
                   electricBillingType === 'submeter_flat'
-                    ? 'bg-indigo-950/40 border-indigo-500/60 text-white'
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+                    ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-500/60 text-slate-900 dark:text-white shadow-sm'
+                    : 'bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700'
                 }`}
               >
                 <input
@@ -351,11 +351,11 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                   name="electric-type"
                   checked={electricBillingType === 'submeter_flat'}
                   onChange={() => setElectricBillingType('submeter_flat')}
-                  className="mt-0.5 accent-indigo-500"
+                  className="mt-0.5 accent-emerald-600"
                 />
                 <div>
-                  <div className="font-bold text-xs text-white">Private Sub-Meter Flat Rate</div>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
+                  <div className="font-bold text-xs text-slate-900 dark:text-white">Private Sub-Meter Flat Rate</div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                     Building charges a set THB per unit. Typical for student apartments (6–8 THB).
                   </p>
                 </div>
@@ -365,7 +365,7 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
             {/* Revealed Sub-Meter Rate Input */}
             {electricBillingType === 'submeter_flat' && (
               <div className="pt-2 flex items-center space-x-3">
-                <span className="text-xs text-slate-300 font-medium">Sub-Meter Rate per Unit:</span>
+                <span className="text-xs text-slate-700 dark:text-slate-300 font-medium">Sub-Meter Rate per Unit:</span>
                 <div className="relative w-36">
                   <input
                     id="input-electric-rate"
@@ -375,7 +375,7 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                     step="0.5"
                     value={electricRate}
                     onChange={(e) => setElectricRate(e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 font-mono text-xs text-amber-300 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                    className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 font-mono text-xs text-amber-700 dark:text-amber-300 focus:outline-none focus:ring-1 focus:ring-amber-500 shadow-sm"
                   />
                   <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] text-slate-400">
                     THB / unit
@@ -383,11 +383,11 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
                 </div>
                 <span className="text-[11px] text-slate-500">
                   {electricRate >= 9 ? (
-                    <span className="text-red-400 font-bold">⚠️ Predatory markup!</span>
+                    <span className="text-red-600 dark:text-red-400 font-bold">⚠️ Predatory markup!</span>
                   ) : electricRate > 8 ? (
-                    <span className="text-amber-400">Above average normal</span>
+                    <span className="text-amber-600 dark:text-amber-400">Above average normal</span>
                   ) : (
-                    <span className="text-emerald-400">✓ Fair market rate</span>
+                    <span className="text-emerald-600 dark:text-emerald-400">✓ Fair market rate</span>
                   )}
                 </span>
               </div>
@@ -396,11 +396,11 @@ export default function ModeB_ListingAuditor({ onAuditResult, auditResult }) {
         </div>
 
         {/* Submit Button */}
-        <div className="pt-4 border-t border-slate-800 flex justify-end">
+        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
           <button
             id="evaluate-lease-btn"
             onClick={() => handleEvaluate()}
-            className="w-full sm:w-auto px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-emerald-500 hover:from-indigo-600 hover:to-emerald-600 text-white font-bold text-sm flex items-center justify-center space-x-2 shadow-lg shadow-indigo-500/25 active:scale-95 transition-all"
+            className="w-full sm:w-auto px-8 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center justify-center space-x-2 shadow-md shadow-emerald-600/20 active:scale-95 transition-all"
           >
             <Calculator className="w-4 h-4" />
             <span>Evaluate Lease & Calculate True Costs</span>

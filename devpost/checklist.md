@@ -65,4 +65,5 @@ Activity mode: Live application verified on localhost:5173.
 
 ## Revisions
 
-- Refactored brand tone to "Smart Accommodation & Rental Living Assistant", replaced mock data with 4 real Bangkok residences (Lumpini Ville, Pracha Uthit Student Court, Ideo Sukhumvit 93, Twin Peaks Phahonyothin), defaulted active view to Browse Accommodations, and upgraded lease auditor to a structured multi-input questionnaire with 3 demo presets.
+- Refactored brand tone to "Smart Accommodation & Rental Living Assistant", replaced mock data with real Bangkok residences, defaulted active view to Browse Accommodations, and upgraded lease auditor to a structured multi-input questionnaire with 3 demo presets.
+- Upgraded SafeRoom UI with Daylight Theme as default (persisted in localStorage with Sun/Moon navbar switch), dual-input manual numeric price filtering (Min/Max THB with slider & 5 quick-price pills), 50 Bangkok districts dropdown selector, expanded authentic Bangkok dataset (10 properties across key districts), and dynamic Google Maps district explorer card.
