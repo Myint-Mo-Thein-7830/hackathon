@@ -9,7 +9,7 @@ Build mode: fast
 
 ## Slices
 
-- [ ] **1. Scaffolding, Core Layout, and Domain Heuristic Engine with 1-Click Test Chips (Mode B Kernel)**
+- [x] **1. Scaffolding, Core Layout, and Domain Heuristic Engine with 1-Click Test Chips (Mode B Kernel)**
   Becomes usable: A running Vite + React + Tailwind CSS app with the dark cybersecurity theme, navigation bar with mode switchers, and Mode B (Audit Outside Listing). Clicking the two test chips ("Sample: Predatory Apartment Listing" and "Sample: Fair Student Condo") or pasting text runs the property-type aware domain heuristic engine and outputs the raw audit metrics.
   Why now: Bootstraps the application, styling system, and immediately proves the unique kernel (Condo vs. Apartment domain logic) right on slice 1.
   PRD ref: `prd.md > The Core Journey` (steps 1–2), `prd.md > Look and Feel`, `prd.md > Mode B: Outside Listing Audit Engine`
