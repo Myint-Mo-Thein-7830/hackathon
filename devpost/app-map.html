@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeRoom — Application Map & Architecture Guide</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --border: #1f293d;
+      --text: #f3f4f6;
+      --text-muted: #94a3b8;
+      --emerald: #10b981;
+      --indigo: #6366f1;
+      --amber: #f59e0b;
+      --red: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    h1 { font-size: 1.85rem; margin-bottom: 0.5rem; color: #fff; }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      margin-bottom: 1rem;
+    }
+    h2 { font-size: 1.25rem; margin: 2rem 0 1rem; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    p { margin-bottom: 1rem; color: var(--text-muted); font-size: 0.95rem; }
+    ul { margin: 1rem 0 1rem 1.5rem; color: var(--text-muted); }
+    li { margin-bottom: 0.5rem; font-size: 0.92rem; }
+    code { font-family: "JetBrains Mono", Consolas, monospace; background: rgba(255,255,255,0.06); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85rem; color: #e2e8f0; }
+    .diagram-box {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    .route-step {
+      background: rgba(255,255,255,0.02);
+      border-left: 3px solid var(--indigo);
+      padding: 1rem;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 1rem;
+    }
+    .route-step strong { color: #fff; display: block; margin-bottom: 0.25rem; }
+    .change-pointer {
+      background: rgba(16, 185, 129, 0.05);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 0.85rem 1.2rem;
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+    }
+    .change-pointer strong { color: var(--emerald); }
+    details { margin: 1rem 0; background: rgba(0,0,0,0.2); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--border); }
+    summary { cursor: pointer; font-weight: 600; color: #cbd5e1; }
+    footer { margin-top: 2.5rem; pt: 1rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: #64748b; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="badge">SafeRoom Architecture Snapshot</span>
+    <h1>SafeRoom — Application Map & Reference Guide</h1>
+    <p>
+      SafeRoom is a client-side smart rental living assistant built with React, Vite, and Tailwind CSS.
+      It helps university students and young renters evaluate housing contracts by separating Condominium rules (direct MEA meters, 2+1 deposits) from Apartment/Dormitory standards (sub-meters, 1+1 deposits).
+    </p>
+
+    <!-- Data & Component Flow Diagram -->
+    <h2>System Architecture & Evaluation Flow</h2>
+    <div class="diagram-box">
+      <svg width="100%" height="160" viewBox="0 0 760 160" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width: 720px;">
+        <!-- Step 1: User Input -->
+        <rect x="20" y="45" width="200" height="70" rx="8" fill="#1e293b" stroke="#6366f1" stroke-width="2"/>
+        <text x="120" y="75" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">Mode B Questionnaire</text>
+        <text x="120" y="95" fill="#94a3b8" font-size="10" text-anchor="middle">Rent, Deposit, Meter Type</text>
+
+        <!-- Arrow 1 -->
+        <path d="M220 80 H280" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)"/>
+        
+        <!-- Step 2: Analyzer Engine -->
+        <rect x="280" y="35" width="200" height="90" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+        <text x="380" y="65" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">analyzer.js</text>
+        <text x="380" y="85" fill="#10b981" font-size="10" text-anchor="middle">analyzeStructuredLease()</text>
+        <text x="380" y="105" fill="#94a3b8" font-size="9" text-anchor="middle">Condo vs. Dorm Benchmarks</text>
+
+        <!-- Arrow 2 -->
+        <path d="M480 80 H540" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- Step 3: Scorecard Output -->
+        <rect x="540" y="45" width="200" height="70" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+        <text x="640" y="75" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">SafetyScorecard.jsx</text>
+        <text x="640" y="95" fill="#94a3b8" font-size="10" text-anchor="middle">0-100% Gauge + Outflow Calc</text>
+
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 8 5 L 0 9 z" fill="#94a3b8"/>
+          </marker>
+        </defs>
+      </svg>
+      <p style="font-size: 0.8rem; margin-top: 0.5rem; margin-bottom: 0;">
+        Pure client-side execution — Zero network dependencies or API keys required during evaluation.
+      </p>
+    </div>
+
+    <!-- 3-Stop Code Reference Route -->
+    <h2>Key Code Locations (Reference Route)</h2>
+    <div class="route-step">
+      <strong>1. Domain Heuristic Engine: <code>src/services/analyzer.js</code></strong>
+      Contains <code>analyzeStructuredLease()</code> and the <code>DEMO_PRESETS</code> dataset.
+      Evaluates deposit multiples against property-type norms, applies MEA residential tier pricing (~4.5 THB/unit) vs sub-meter rates (6–8 THB fair, 10 THB predatory), and drafts the Landlord Inquiry Copilot script.
+    </div>
+
+    <div class="route-step">
+      <strong>2. Lease Questionnaire: <code>src/components/ModeB_ListingAuditor.jsx</code></strong>
+      Renders the 6 clean input fields (Property Name, Type, Base Rent, Deposit selector, Advance payment timing, and Sub-meter toggle) along with the 3 one-click preset scenario chips.
+    </div>
+
+    <div class="route-step">
+      <strong>3. Pre-Screened Accommodations: <code>src/data/mockListings.js</code> &amp; <code>ModeA_RoomBrowser.jsx</code></strong>
+      Stores the 4 verified Bangkok residences (Lumpini Ville Ratburana, Pracha Uthit Student Court, Ideo Sukhumvit 93, Twin Peaks Phahonyothin) with search filtering and modal scorecard inspection.
+    </div>
+
+    <!-- Pointers -->
+    <h2>"To Change This, Start Here"</h2>
+    <div class="change-pointer">
+      <strong>To add or modify verified accommodations:</strong>
+      Edit <code>src/data/mockListings.js</code> and add a new listing object following the existing schema.
+    </div>
+    <div class="change-pointer">
+      <strong>To adjust electricity consumption baselines or fair thresholds:</strong>
+      Update <code>MONTHLY_KWH_BASELINE</code> or <code>APARTMENT_FAIR_ELECTRIC_RATE</code> in <code>src/services/analyzer.js</code>.
+    </div>
+    <div class="change-pointer">
+      <strong>To change theme accents or styling tokens:</strong>
+      Modify <code>tailwind.config.js</code> or the utility classes in <code>src/index.css</code>.
+    </div>
+
+    <!-- Practice to Reuse -->
+    <h2>A Practice to Reuse</h2>
+    <p>
+      <strong>Calibrating Logic by Asset Class (Flipped Evaluation):</strong>
+      Generic scam checkers flag any 2-month deposit or private utility bill indiscriminately. By explicitly splitting rules into Condominiums vs. Apartments, SafeRoom eliminates false positives while instantly catching predatory 10 THB/unit sub-meter markups. On future projects, always categorize inputs into domain-aware contexts before applying validation rules.
+    </p>
+
+    <!-- How to Run -->
+    <h2>How to Run the Application</h2>
+    <p>Run locally via Node.js:</p>
+    <pre style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; font-size: 0.85rem; color: #a5f3fc; margin-bottom: 1rem;">npm run dev</pre>
+    <p>Open browser to <code>http://localhost:5173/</code></p>
+
+    <footer>
+      SafeRoom Build Snapshot • Git Commit: <code>e7a4ad5</code> • Built with Vite, React, and Tailwind CSS.
+    </footer>
+  </div>
+</body>
+</html>

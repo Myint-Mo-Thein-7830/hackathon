@@ -53,15 +53,15 @@ Build mode: fast
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
+- [x] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: [to be recorded upon completion]
-Route and stops: [to be recorded upon completion]
-Edit outcome: [to be recorded upon completion]
-Reflection: [to be recorded upon completion]
-Activity mode: [to be recorded upon completion]
+Activity and evidence: Traced lease evaluation flow across analyzer.js, ModeB_ListingAuditor.jsx, and SafetyScorecard.jsx. Real Bangkok residences verified in mockListings.js.
+Route and stops: 1. src/services/analyzer.js (analyzeStructuredLease), 2. src/components/ModeB_ListingAuditor.jsx (questionnaire & presets), 3. src/components/SafetyScorecard.jsx (gauge & cost calculator).
+Edit outcome: Tone rebrand, real Bangkok accommodation data, and structured questionnaire successfully implemented and verified in build.
+Reflection: Domain-aware asset class calibration (Condominium vs. Dormitory) identified as a reusable architectural pattern for future validation tools.
+Activity mode: Live application verified on localhost:5173.
 
 ## Revisions
 
