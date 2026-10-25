@@ -13,7 +13,7 @@ import { MOCK_LISTINGS } from '../data/mockListings';
 import RoomCard from './RoomCard';
 import SafetyScorecard from './SafetyScorecard';
 
-export default function ModeA_RoomBrowser() {
+export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [propertyFilter, setPropertyFilter] = useState('all'); // 'all' | 'condo' | 'apartment'
   const [maxBudget, setMaxBudget] = useState(15000);
@@ -47,18 +47,31 @@ export default function ModeA_RoomBrowser() {
 
   return (
     <div className="space-y-8">
-      {/* Hero Headline */}
+      {/* Rebranded Hero Headline */}
       <div className="text-center max-w-3xl mx-auto space-y-2 pt-2">
         <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Pre-Vetted & Audit-Verified Properties</span>
+          <span>Pre-Screened Bangkok Accommodations</span>
         </div>
         <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-          Browse Pre-Screened <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-indigo-400">Safe Rooms</span>
+          Find & Evaluate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-indigo-400">Ideal Rental Accommodation</span>
         </h1>
         <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto">
-          Every listing is pre-inspected for legitimate deposit structures and transparent electricity billing models. No phantom listings, zero predatory markups.
+          Transparent cost calculations, fair lease verification, and pre-screened rooms tailored for students and young professionals.
         </p>
+
+        {/* Callout Banner to Companion Tool */}
+        <div className="pt-3">
+          <div className="inline-flex items-center space-x-3 px-4 py-2 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 text-xs text-indigo-200 shadow-sm">
+            <span>Evaluating an outside listing from Facebook Marketplace or LINE?</span>
+            <button
+              onClick={onSwitchToEvaluate}
+              className="font-bold underline text-indigo-300 hover:text-white flex items-center space-x-1"
+            >
+              <span>Evaluate a Lease →</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Filter & Search Bar */}

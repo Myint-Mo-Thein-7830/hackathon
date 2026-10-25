@@ -60,7 +60,7 @@ export default function SafetyScorecard({ auditResult }) {
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Safety Scorecard Inspection
+            {auditResult.propertyName || 'Lease Terms Scorecard'}
           </h2>
 
           <p className="text-xs sm:text-sm text-slate-400 max-w-xl">

@@ -42,11 +42,14 @@ Build mode: fast
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — after Slice 2 (Mode B outside listing audit & complete scorecard demo flow)
-- [ ] Final kick-the-tires exploration and feedback completed — after Slice 3 (Full dual-door app)
+- [x] Final kick-the-tires exploration and feedback completed — after Slice 3 (Full dual-door app)
 
 ## Final Review
 
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+- [x] Rebrand tone to "Smart Accommodation & Rental Living Assistant" across navigation, titles, and headers
+- [x] Real Bangkok student accommodations (Lumpini Ville, Pracha Uthit Court, Ideo Sukhumvit, Twin Peaks) in mock dataset
+- [x] Structured multi-input questionnaire with 3 demo presets replacing single textarea in lease evaluator
+- [x] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map
 
@@ -62,3 +65,4 @@ Activity mode: [to be recorded upon completion]
 
 ## Revisions
 
+- Refactored brand tone to "Smart Accommodation & Rental Living Assistant", replaced mock data with 4 real Bangkok residences (Lumpini Ville, Pracha Uthit Student Court, Ideo Sukhumvit 93, Twin Peaks Phahonyothin), defaulted active view to Browse Accommodations, and upgraded lease auditor to a structured multi-input questionnaire with 3 demo presets.
