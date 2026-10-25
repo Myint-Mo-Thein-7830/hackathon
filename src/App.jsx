@@ -3,35 +3,15 @@ import Navbar from './components/Navbar';
 import ModeA_RoomBrowser from './components/ModeA_RoomBrowser';
 import ModeB_ListingAuditor from './components/ModeB_ListingAuditor';
 import SafetyScorecard from './components/SafetyScorecard';
+import { useTheme } from './context/ThemeContext';
 import { analyzeStructuredLease, DEMO_PRESETS } from './services/analyzer';
 
 export default function App() {
-  // Theme state: defaults to 'light' unless user has explicitly saved 'dark' in localStorage
-  const [theme, setTheme] = useState(() => localStorage.getItem('saferoom-theme') || 'light');
+  const { theme, toggleTheme } = useTheme();
 
   // Default to 'browse' view so users first see real, available places!
   const [activeMode, setActiveMode] = useState('browse'); // 'browse' | 'evaluate'
   const [auditResult, setAuditResult] = useState(null);
-
-  // Sync theme with DOM and localStorage
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(nextTheme);
-    localStorage.setItem('saferoom-theme', nextTheme);
-    if (nextTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
 
   // Initialize evaluation with default preset
   useEffect(() => {
@@ -40,7 +20,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'dark bg-slate-950 text-slate-100' : 'bg-white text-slate-900'} flex flex-col selection:bg-emerald-500 selection:text-white transition-colors duration-200`}>
+    <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-white transition-colors duration-200">
       {/* Background Ambience Gradients */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className={`absolute -top-40 -left-40 w-96 h-96 rounded-full blur-3xl transition-opacity duration-300 ${theme === 'dark' ? 'bg-indigo-500/10' : 'bg-emerald-500/5'}`}></div>
@@ -76,7 +56,7 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className={`border-t ${theme === 'dark' ? 'border-slate-800 bg-slate-950 text-slate-500' : 'border-slate-200 bg-white text-slate-500'} py-6 mt-12 text-center text-xs transition-colors duration-200`}>
+      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-500 py-6 mt-12 text-center text-xs transition-colors duration-200">
         <p>SafeRoom — Smart Accommodation & Rental Living Assistant | Devpost: Build With AI</p>
       </footer>
     </div>
