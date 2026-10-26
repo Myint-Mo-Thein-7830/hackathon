@@ -17,7 +17,8 @@ import { MOCK_LISTINGS, BANGKOK_50_DISTRICTS } from '../data/mockListings';
 import RoomCard from './RoomCard';
 import SafetyScorecard from './SafetyScorecard';
 
-export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
+export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) {
+  const handleSwitchToEvaluate = onSwitchToEvaluate || (() => setActiveTab && setActiveTab('evaluate'));
   const [searchQuery, setSearchQuery] = useState('');
   const [propertyFilter, setPropertyFilter] = useState('All'); // 'All' | 'Condo' | 'Dorm'
   const [selectedDistrict, setSelectedDistrict] = useState('All 50 Districts');
@@ -130,7 +131,7 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate }) {
           <div className="inline-flex items-center space-x-3 px-4 py-2 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 text-xs shadow-sm transition-colors">
             <span>Evaluating an outside listing from Facebook Marketplace or LINE?</span>
             <button
-              onClick={onSwitchToEvaluate}
+              onClick={handleSwitchToEvaluate}
               className="font-bold underline text-emerald-700 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300 flex items-center space-x-1"
             >
               <span>Evaluate a Lease →</span>

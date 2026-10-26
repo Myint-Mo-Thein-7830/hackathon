@@ -1,26 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
-import ModeA_RoomBrowser from './components/ModeA_RoomBrowser';
-import ModeB_ListingAuditor from './components/ModeB_ListingAuditor';
-import SafetyScorecard from './components/SafetyScorecard';
+import BrowseAccommodations from './components/BrowseAccommodations';
+import EvaluateLeaseView from './components/EvaluateLeaseView';
 import { useTheme } from './context/ThemeContext';
-import { analyzeStructuredLease, DEMO_PRESETS } from './services/analyzer';
 
 export default function App() {
   const { theme, toggleTheme } = useTheme();
-
-  // Default to 'browse' view so users first see real, available places!
-  const [activeMode, setActiveMode] = useState('browse'); // 'browse' | 'evaluate'
-  const [auditResult, setAuditResult] = useState(null);
-
-  // Initialize evaluation with default preset
-  useEffect(() => {
-    const initial = analyzeStructuredLease(DEMO_PRESETS.budgetDorm.data);
-    setAuditResult(initial);
-  }, []);
+  const [activeTab, setActiveTab] = useState('browse'); // 'browse' | 'evaluate'
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-white transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200 flex flex-col font-sans">
       {/* Background Ambience Gradients */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className={`absolute -top-40 -left-40 w-96 h-96 rounded-full blur-3xl transition-opacity duration-300 ${theme === 'dark' ? 'bg-indigo-500/10' : 'bg-emerald-500/5'}`}></div>
@@ -28,36 +17,25 @@ export default function App() {
         <div className={`absolute -bottom-40 left-1/3 w-96 h-96 rounded-full blur-3xl transition-opacity duration-300 ${theme === 'dark' ? 'bg-indigo-500/5' : 'bg-emerald-500/5'}`}></div>
       </div>
 
-      {/* Main Navigation */}
       <Navbar 
-        activeMode={activeMode} 
-        setActiveMode={setActiveMode} 
-        theme={theme}
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        activeMode={activeTab}
+        setActiveMode={setActiveTab}
+        theme={theme} 
         toggleTheme={toggleTheme}
       />
 
-      {/* Main Content Area */}
-      <main className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 bg-transparent">
-        {activeMode === 'browse' ? (
-          <ModeA_RoomBrowser onSwitchToEvaluate={() => setActiveMode('evaluate')} />
+      <main className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {activeTab === 'browse' ? (
+          <BrowseAccommodations setActiveTab={setActiveTab} onSwitchToEvaluate={() => setActiveTab('evaluate')} />
         ) : (
-          <div className="space-y-8 bg-transparent">
-            <ModeB_ListingAuditor 
-              onAuditResult={setAuditResult} 
-              auditResult={auditResult} 
-            />
-
-            {/* Complete Unified Safety Scorecard */}
-            {auditResult && (
-              <SafetyScorecard auditResult={auditResult} />
-            )}
-          </div>
+          <EvaluateLeaseView setActiveTab={setActiveTab} />
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-500 py-6 mt-12 text-center text-xs transition-colors duration-200">
-        <p>SafeRoom — Smart Accommodation & Rental Living Assistant | Devpost: Build With AI</p>
+      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 text-center text-xs text-slate-500 dark:text-slate-400">
+        SafeRoom Bangkok • Built for Devpost Learn AI Basics Hackathon
       </footer>
     </div>
   );
