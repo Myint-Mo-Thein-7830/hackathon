@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import BrowseAccommodations from './components/BrowseAccommodations';
 import EvaluateLeaseView from './components/EvaluateLeaseView';
+import RentalChatbot from './components/RentalChatbot';
 import { useTheme } from './context/ThemeContext';
 
 export default function App() {
@@ -33,6 +34,9 @@ export default function App() {
           <EvaluateLeaseView setActiveTab={setActiveTab} />
         )}
       </main>
+
+      {/* Floating AI Assistant Chatbot */}
+      <RentalChatbot />
 
       <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 text-center text-xs text-slate-500 dark:text-slate-400">
         SafeRoom Bangkok • Built for Devpost Learn AI Basics Hackathon
