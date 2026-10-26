@@ -25,7 +25,7 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) 
   
   // Dual price filter states
   const [minRent, setMinRent] = useState(0);
-  const [maxRent, setMaxRent] = useState(20000);
+  const [maxRent, setMaxRent] = useState(50000);
 
   const [selectedRoom, setSelectedRoom] = useState(null);
 
@@ -98,7 +98,7 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) 
     setPropertyFilter('All');
     setSelectedDistrict('All 50 Districts');
     setMinRent(0);
-    setMaxRent(20000);
+    setMaxRent(50000);
     setCurrentPage(1);
   };
 
@@ -275,10 +275,10 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) 
             </div>
             <input
               type="range"
-              min="4000"
-              max="20000"
+              min="2000"
+              max="50000"
               step="500"
-              value={Math.min(20000, maxRent)}
+              value={Math.min(50000, maxRent)}
               onChange={(e) => setMaxRent(parseInt(e.target.value, 10))}
               className="w-full accent-emerald-600 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg cursor-pointer"
             />
