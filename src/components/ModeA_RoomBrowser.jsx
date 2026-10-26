@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { 
   Search, 
   Building2, 
@@ -11,7 +11,10 @@ import {
   ChevronLeft,
   ChevronRight,
   SlidersHorizontal,
-  Compass
+  Compass,
+  ArrowRight,
+  Check,
+  Loader2
 } from 'lucide-react';
 import { MOCK_LISTINGS, BANGKOK_50_DISTRICTS } from '../data/mockListings';
 import RoomCard from './RoomCard';
@@ -22,6 +25,42 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) 
   const [searchQuery, setSearchQuery] = useState('');
   const [propertyFilter, setPropertyFilter] = useState('All'); // 'All' | 'Condo' | 'Dorm'
   const [selectedDistrict, setSelectedDistrict] = useState('All 50 Districts');
+  const searchInputRef = useRef(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchSuccess, setSearchSuccess] = useState(false);
+
+  const handleSearchSubmit = (e) => {
+    if (e) e.preventDefault();
+    setIsSearching(true);
+    setCurrentPage(1);
+
+    const qTrim = searchQuery.trim().toLowerCase();
+    if (qTrim) {
+      const matchedDistrict = BANGKOK_50_DISTRICTS.find(d => 
+        d !== 'All 50 Districts' && (
+          d.toLowerCase() === qTrim || 
+          d.toLowerCase().replace(/\s+/g, '') === qTrim.replace(/\s+/g, '') ||
+          d.toLowerCase().replace(/\s+/g, '').replace('thawi', 'tawi') === qTrim.replace(/\s+/g, '').replace('thawi', 'tawi')
+        )
+      );
+
+      if (matchedDistrict) {
+        setSelectedDistrict(matchedDistrict);
+      }
+    }
+
+    searchInputRef.current?.blur();
+
+    setTimeout(() => {
+      setIsSearching(false);
+      setSearchSuccess(true);
+      const section = document.getElementById('accommodations-grid-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      setTimeout(() => setSearchSuccess(false), 2000);
+    }, 200);
+  };
   
   // Dual price filter states
   const [minRent, setMinRent] = useState(0);
@@ -170,26 +209,74 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) 
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm rounded-2xl p-4 sm:p-6 space-y-4">
         {/* Row 1: Search + Property Type Toggle */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-          {/* Universal Search Input (7 cols) */}
-          <div className="md:col-span-7 relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          {/* Universal Search Form with Enter & Submit Button (7 cols) */}
+          <form
+            onSubmit={handleSearchSubmit}
+            className="md:col-span-7 relative flex items-center"
+          >
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
+              ref={searchInputRef}
               id="search-accommodations-input"
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by campus, landmark, BTS/MRT, address (e.g. KMUTT, Bang Chak, Ari)..."
-              className="w-full pl-10 pr-8 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-slate-400 text-xs sm:text-sm shadow-sm transition-all"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleSearchSubmit(e);
+                }
+              }}
+              placeholder="Search by campus, landmark, BTS/MRT, district, address..."
+              className="w-full pl-10 pr-28 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-slate-400 text-xs sm:text-sm shadow-sm transition-all"
             />
-            {searchQuery && (
-              <button 
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+            
+            <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
+              {searchQuery && (
+                <button 
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    searchInputRef.current?.focus();
+                  }}
+                  title="Clear search"
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+              
+              <button
+                type="submit"
+                id="search-submit-btn"
+                title="Search or press Enter"
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-all shadow-sm ${
+                  isSearching
+                    ? 'bg-emerald-700 text-white scale-95 ring-2 ring-emerald-300'
+                    : searchSuccess
+                    ? 'bg-emerald-600 text-white ring-2 ring-emerald-400'
+                    : 'bg-emerald-600 hover:bg-emerald-700 text-white hover:scale-105 active:scale-95'
+                }`}
               >
-                <X className="w-3.5 h-3.5" />
+                {isSearching ? (
+                  <>
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    <span className="hidden sm:inline">Searching</span>
+                  </>
+                ) : searchSuccess ? (
+                  <>
+                    <Check className="w-3 h-3 text-white" />
+                    <span className="hidden sm:inline">Found</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Search</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </>
+                )}
               </button>
-            )}
-          </div>
+            </div>
+          </form>
 
           {/* Property Type Toggle (5 cols) */}
           <div className="md:col-span-5 flex items-center bg-slate-100 dark:bg-slate-950 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
@@ -378,7 +465,40 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) 
       </div>
 
       {/* Accommodations Card Grid Section */}
-      <section className="bg-transparent">
+      <section id="accommodations-grid-section" className="bg-transparent scroll-mt-6 space-y-4">
+        {/* Active Search & Filter Feedback Banner */}
+        {(searchQuery || selectedDistrict !== 'All 50 Districts') && (
+          <div className="flex flex-wrap items-center justify-between gap-2 p-3 px-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 shadow-sm text-xs text-slate-800 dark:text-slate-200">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>
+                Results for{' '}
+                {searchQuery && (
+                  <span className="font-bold text-slate-900 dark:text-white">
+                    "{searchQuery}"
+                  </span>
+                )}
+                {searchQuery && selectedDistrict !== 'All 50 Districts' && ' in '}
+                {selectedDistrict !== 'All 50 Districts' && (
+                  <span className="font-bold text-emerald-700 dark:text-emerald-400">
+                    {selectedDistrict}
+                  </span>
+                )}
+                {' — '}
+                <span className="text-emerald-700 dark:text-emerald-400 font-bold">
+                  {filteredListings.length} {filteredListings.length === 1 ? 'place' : 'places'} found
+                </span>
+              </span>
+            </div>
+            <button
+              onClick={handleResetFilters}
+              className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 underline flex items-center gap-1"
+            >
+              <RotateCcw className="w-3 h-3" />
+              Reset filters
+            </button>
+          </div>
+        )}
         {paginatedListings.length === 0 ? (
           <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm">
             <div className="p-3 rounded-full bg-slate-100 dark:bg-slate-950 w-12 h-12 mx-auto flex items-center justify-center text-slate-400">
