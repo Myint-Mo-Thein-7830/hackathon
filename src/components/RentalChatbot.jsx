@@ -45,8 +45,15 @@ const DISTRICT_ALIASES = {
   "Pom Prap Sattru Phai": ["pom prap", "pomprap", "bobae", "chinatown", "klong thom", "worachak"],
   "Ratchathewi": ["ratchathewi", "victory monument", "pratunam", "makkasan"],
   "Sai Mai": ["sai mai", "saimai", "saphan mai", "saphanmai", "sai yud", "kor por aor", "permsin"],
-  "Sathon": ["sathon", "sathorn", "surasak", "saint louis", "chan rd", "narathiwas"],
-  "Watthana": ["watthana", "wattana", "asok", "midtown asoke", "thonglor", "ekamai"]
+  "Sathon": ["sathon", "sathorn", "surasak", "saint louis", "st louis", "chan rd", "naradhiwas", "suan phlu", "suanplu", "yen akat"],
+  "Suan Luang": ["suan luang", "suanluang", "on nut 46", "on nut 66", "si nut", "phatthanakan", "pickadaily"],
+  "Taling Chan": ["taling chan", "talingchan", "chaiyapruek", "borommaratchachonnani", "bang ramat", "suan phak", "khlong lat mayom"],
+  "Tawi Watthana": ["tawi watthana", "thawi watthana", "thawiwatthana", "tawiwatthana", "sala thammasop", "bangkokthonburi", "btu", "phutthamonthon sai 2", "phutthamonthon sai 3", "phutthamonthon sai 4", "sanam luang 2"],
+  "Thon Buri": ["thon buri", "thonburi", "pho nimit", "talat phlu", "talatphlu", "wutthakat", "bukkhalo", "inthoraphithak"],
+  "Wang Thonglang": ["wang thonglang", "wangthonglang", "town in town", "srivara", "lat phrao 101", "lat phrao 81", "chok chai 4", "bodindecha"],
+  "Watthana": ["watthana", "wattana", "asok", "midtown asoke", "thonglor", "thong lo", "ekkamai", "ekamai", "pridi banomyong", "sukhumvit 71"],
+  "Yan Nawa": ["yan nawa", "yannawa", "rama 3", "brt wat dan", "brt wat dokmai", "brt thanon chan", "sathu pradit", "chong nonsi", "wat pariwat"],
+  "Saphan Sung": ["saphan sung", "saphansung", "sammakorn", "soi mistine", "rat phatthana", "krungthep kreetha", "nom klao"]
 };
 
 // Remove raw markdown asterisks and standardize bullets
@@ -89,27 +96,32 @@ function getSimilarity(s1, s2) {
   return (longerLength - costs[shorter.length]) / parseFloat(longerLength);
 }
 
+// Pre-compute candidate list sorted by descending length to prevent substring hijacking (e.g., Watthana vs Tawi Watthana)
+const SORTED_DISTRICT_CANDIDATES = (() => {
+  const list = [];
+  for (const district of ALL_50_DISTRICTS) {
+    list.push({ district, term: district.toLowerCase(), norm: normalize(district) });
+    if (DISTRICT_ALIASES[district]) {
+      for (const alias of DISTRICT_ALIASES[district]) {
+        list.push({ district, term: alias.toLowerCase(), norm: normalize(alias) });
+      }
+    }
+  }
+  return list.sort((a, b) => b.term.length - a.term.length);
+})();
+
 // Robust Intent Parser
 function parseUserIntent(query) {
   const rawQ = query.toLowerCase();
   const normQ = normalize(query);
 
-  // 1. Direct exact or alias match across all districts
+  // 1. Direct exact or alias match across all districts (longest match wins)
   let detectedDistrict = null;
 
-  for (const district of ALL_50_DISTRICTS) {
-    if (rawQ.includes(district.toLowerCase()) || normQ.includes(normalize(district))) {
+  for (const { district, term, norm } of SORTED_DISTRICT_CANDIDATES) {
+    if (rawQ.includes(term) || (norm.length >= 4 && normQ.includes(norm))) {
       detectedDistrict = district;
       break;
-    }
-  }
-
-  if (!detectedDistrict) {
-    for (const [official, aliases] of Object.entries(DISTRICT_ALIASES)) {
-      if (aliases.some(alias => rawQ.includes(alias) || normQ.includes(normalize(alias)))) {
-        detectedDistrict = official;
-        break;
-      }
     }
   }
 
