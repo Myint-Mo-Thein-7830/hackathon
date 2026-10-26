@@ -375,6 +375,7 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) 
               <RoomCard
                 key={room.id}
                 room={room}
+                item={room}
                 onSelectRoom={setSelectedRoom}
               />
             ))}

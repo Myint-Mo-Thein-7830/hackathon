@@ -17,7 +17,12 @@
     "safetyScore": 98,
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Kave+Luminous+Bangmod+Bangkok",
     "imageUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Swimming Pool", "Fitness Center", "Co-Working Space", "Keycard Access"]
+    "amenities": [
+      "Swimming Pool",
+      "Fitness Center",
+      "Co-Working Space",
+      "Keycard Access"
+    ]
   },
   {
     "id": "bkk-condo-library",
@@ -37,7 +42,12 @@
     "safetyScore": 97,
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Library+Houze+Condo+Bangkok",
     "imageUrl": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Study Lounge", "Lap Pool", "Gym", "24/7 Security"]
+    "amenities": [
+      "Study Lounge",
+      "Lap Pool",
+      "Gym",
+      "24/7 Security"
+    ]
   },
   {
     "id": "bkk-condo-suanthon",
@@ -57,7 +67,12 @@
     "safetyScore": 96,
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Baan+Suan+Thon+Bangmod+Bangkok",
     "imageUrl": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Green Garden", "Parking", "Elevator", "CCTV"]
+    "amenities": [
+      "Green Garden",
+      "Parking",
+      "Elevator",
+      "CCTV"
+    ]
   },
   {
     "id": "bkk-dorm-prachauthit",
@@ -72,12 +87,17 @@
     "advanceRentMonths": 1,
     "totalMoveInCash": 9000,
     "electricityBilling": "Private Sub-Meter: 7.0 THB/unit",
-    "electricityRate": 7.0,
+    "electricityRate": 7,
     "isGovernmentMeter": false,
     "safetyScore": 95,
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pracha+Uthit+45+Dormitory+Bangkok",
     "imageUrl": "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["High-Speed Wi-Fi", "Keycard Entry", "Coin Laundry", "Study Lounge"]
+    "amenities": [
+      "High-Speed Wi-Fi",
+      "Keycard Entry",
+      "Coin Laundry",
+      "Study Lounge"
+    ]
   },
   {
     "id": "bkk-dorm-bann45",
@@ -92,12 +112,17 @@
     "advanceRentMonths": 1,
     "totalMoveInCash": 8400,
     "electricityBilling": "Private Sub-Meter: 7.0 THB/unit",
-    "electricityRate": 7.0,
+    "electricityRate": 7,
     "isGovernmentMeter": false,
     "safetyScore": 94,
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Bann+45+Phutthabucha+Bangkok",
     "imageUrl": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["24hr Access", "Furnished Room", "Balcony", "Coin Laundry"]
+    "amenities": [
+      "24hr Access",
+      "Furnished Room",
+      "Balcony",
+      "Coin Laundry"
+    ]
   },
   {
     "id": "bkk-dorm-jhome",
@@ -117,7 +142,12 @@
     "safetyScore": 93,
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=J+home+apartment+Phutthabucha+Bangkok",
     "imageUrl": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Air Conditioning", "Keycard Door", "Motorcycle Parking", "Wi-Fi"]
+    "amenities": [
+      "Air Conditioning",
+      "Keycard Door",
+      "Motorcycle Parking",
+      "Wi-Fi"
+    ]
   },
   {
     "id": "bkk-condo-lumpiniratburana",
@@ -137,7 +167,12 @@
     "safetyScore": 98,
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Lumpini+Ville+Ratburana+Riverview+Bangkok",
     "imageUrl": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Riverview Pool", "Fitness Center", "7-Eleven On-Site", "Shuttle Van to BTS"]
+    "amenities": [
+      "Riverview Pool",
+      "Fitness Center",
+      "7-Eleven On-Site",
+      "Shuttle Van to BTS"
+    ]
   },
   {
     "id": "bkk-condo-ideo93",
@@ -157,7 +192,12 @@
     "safetyScore": 97,
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Ideo+Sukhumvit+93+Bangkok",
     "imageUrl": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Sky Pool", "Multi-Sports Court", "Starbucks On-Site", "Co-Working Hub"]
+    "amenities": [
+      "Sky Pool",
+      "Multi-Sports Court",
+      "Starbucks On-Site",
+      "Co-Working Hub"
+    ]
   },
   {
     "id": "bkk-condo-lifeasoke",
@@ -177,7 +217,12 @@
     "safetyScore": 96,
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Life+Asoke+Rama+9+Bangkok",
     "imageUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Rooftop Infinity Pool", "Sky Lounge", "Grand Lobby", "EV Charging"]
+    "amenities": [
+      "Rooftop Infinity Pool",
+      "Sky Lounge",
+      "Grand Lobby",
+      "EV Charging"
+    ]
   },
   {
     "id": "bkk-condo-chulasamyan",
@@ -197,7 +242,12 @@
     "safetyScore": 99,
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Ideo+Chula+Samyan+Bangkok",
     "imageUrl": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["24hr Study Library", "Sky Fitness", "Olympic Lap Pool", "Concierge"]
+    "amenities": [
+      "24hr Study Library",
+      "Sky Fitness",
+      "Olympic Lap Pool",
+      "Concierge"
+    ]
   },
   {
     "id": "bangkhen-condo-knightsbridge",
@@ -217,7 +267,15 @@
     "safetyScore": 98,
     "googleMapsUrl": "https://maps.google.com/?q=Knightsbridge+Phaholyothin+Interchange",
     "imageUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Infinity Edge Sky Pool", "Sky Lounge", "Fitness Pavilion", "Smart Digital Lock", "24/7 Security", "Direct MEA Meter", "Covered Parking"]
+    "amenities": [
+      "Infinity Edge Sky Pool",
+      "Sky Lounge",
+      "Fitness Pavilion",
+      "Smart Digital Lock",
+      "24/7 Security",
+      "Direct MEA Meter",
+      "Covered Parking"
+    ]
   },
   {
     "id": "bangkhen-condo-modizstation",
@@ -237,7 +295,15 @@
     "safetyScore": 97,
     "googleMapsUrl": "https://maps.google.com/?q=Modiz+Station+Phahonyothin+59",
     "imageUrl": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Rooftop Swimming Pool", "Fitness Center", "Sauna", "Keycard Access", "Direct MEA Meter", "Security Guard", "Balcony"]
+    "amenities": [
+      "Rooftop Swimming Pool",
+      "Fitness Center",
+      "Sauna",
+      "Keycard Access",
+      "Direct MEA Meter",
+      "Security Guard",
+      "Balcony"
+    ]
   },
   {
     "id": "bangkhen-condo-thebase",
@@ -257,7 +323,15 @@
     "safetyScore": 98,
     "googleMapsUrl": "https://maps.google.com/?q=The+Base+Saphanmai",
     "imageUrl": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Panoramic Lap Pool", "Multi-Level Gym", "Co-Working Space", "Keycard Entry", "Covered Parking", "Direct MEA Meter", "24/7 Security"]
+    "amenities": [
+      "Panoramic Lap Pool",
+      "Multi-Level Gym",
+      "Co-Working Space",
+      "Keycard Entry",
+      "Covered Parking",
+      "Direct MEA Meter",
+      "24/7 Security"
+    ]
   },
   {
     "id": "bangkhen-condo-knightsbridgeskycity",
@@ -277,7 +351,15 @@
     "safetyScore": 98,
     "googleMapsUrl": "https://maps.google.com/?q=Knightsbridge+Skycity+Saphanmai",
     "imageUrl": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Direct Skybridge to BTS", "Rooftop Pool", "Fitness & Yoga Room", "Direct MEA Meter", "Keycard Gate", "CCTV", "Balcony"]
+    "amenities": [
+      "Direct Skybridge to BTS",
+      "Rooftop Pool",
+      "Fitness & Yoga Room",
+      "Direct MEA Meter",
+      "Keycard Gate",
+      "CCTV",
+      "Balcony"
+    ]
   },
   {
     "id": "bangkhen-condo-brown67",
@@ -297,7 +379,14 @@
     "safetyScore": 96,
     "googleMapsUrl": "https://maps.google.com/?q=Brown+Condo+Phahol+67",
     "imageUrl": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Clubhouse Pool", "Fitness Studio", "Private Balcony", "Direct MEA Meter", "Elevator", "Keycard Entry"]
+    "amenities": [
+      "Clubhouse Pool",
+      "Fitness Studio",
+      "Private Balcony",
+      "Direct MEA Meter",
+      "Elevator",
+      "Keycard Entry"
+    ]
   },
   {
     "id": "bangkhen-condo-episode",
@@ -317,7 +406,14 @@
     "safetyScore": 96,
     "googleMapsUrl": "https://maps.google.com/?q=Episode+Phahol+Sapanmai",
     "imageUrl": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Rooftop Pool", "Sky Fitness", "Digital Door Lock", "Covered Parking", "Direct MEA Meter", "24/7 Security"]
+    "amenities": [
+      "Rooftop Pool",
+      "Sky Fitness",
+      "Digital Door Lock",
+      "Covered Parking",
+      "Direct MEA Meter",
+      "24/7 Security"
+    ]
   },
   {
     "id": "bangkhen-condo-lumpiniplace",
@@ -337,7 +433,14 @@
     "safetyScore": 97,
     "googleMapsUrl": "https://maps.google.com/?q=Lumpini+Place+Ramindra+Laksi",
     "imageUrl": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Large Swimming Pool", "Fitness & Sauna", "Opposite CentralPlaza", "Direct MEA Meter", "Keycard Entry", "Gated Security"]
+    "amenities": [
+      "Large Swimming Pool",
+      "Fitness & Sauna",
+      "Opposite CentralPlaza",
+      "Direct MEA Meter",
+      "Keycard Entry",
+      "Gated Security"
+    ]
   },
   {
     "id": "bangkhen-condo-chapterone",
@@ -357,7 +460,14 @@
     "safetyScore": 97,
     "googleMapsUrl": "https://maps.google.com/?q=Chapter+One+All+Ramintra",
     "imageUrl": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Urban Clubhouse", "Swimming Pool", "Co-Working Studio", "Direct MEA Meter", "EV Charger", "Balcony"]
+    "amenities": [
+      "Urban Clubhouse",
+      "Swimming Pool",
+      "Co-Working Studio",
+      "Direct MEA Meter",
+      "EV Charger",
+      "Balcony"
+    ]
   },
   {
     "id": "bangkhen-condo-lumpinilatplakhao",
@@ -377,7 +487,14 @@
     "safetyScore": 94,
     "googleMapsUrl": "https://maps.google.com/?q=Lumpini+Condotown+Ramindra+Latplakhao",
     "imageUrl": "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Fitness Gym", "Parking Bay", "Keycard Entry", "Direct MEA Meter", "Elevator", "24/7 Security"]
+    "amenities": [
+      "Fitness Gym",
+      "Parking Bay",
+      "Keycard Entry",
+      "Direct MEA Meter",
+      "Elevator",
+      "24/7 Security"
+    ]
   },
   {
     "id": "bangkhen-condo-wecondo",
@@ -397,7 +514,14 @@
     "safetyScore": 95,
     "googleMapsUrl": "https://maps.google.com/?q=WE+Condo+Ekkamai+Ramindra",
     "imageUrl": "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Central Canal Pool", "Modern Fitness", "Tropical Garden", "Keycard Entry", "Direct MEA Meter", "Covered Parking"]
+    "amenities": [
+      "Central Canal Pool",
+      "Modern Fitness",
+      "Tropical Garden",
+      "Keycard Entry",
+      "Direct MEA Meter",
+      "Covered Parking"
+    ]
   },
   {
     "id": "bangkhen-condo-h2",
@@ -417,7 +541,14 @@
     "safetyScore": 94,
     "googleMapsUrl": "https://maps.google.com/?q=H2+Condo+Ramindra+21",
     "imageUrl": "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Swimming Pool", "Fitness Facility", "Keycard Access", "Direct MEA Meter", "Balcony", "Covered Parking"]
+    "amenities": [
+      "Swimming Pool",
+      "Fitness Facility",
+      "Keycard Access",
+      "Direct MEA Meter",
+      "Balcony",
+      "Covered Parking"
+    ]
   },
   {
     "id": "bangkhen-condo-indeed48",
@@ -437,7 +568,14 @@
     "safetyScore": 93,
     "googleMapsUrl": "https://maps.google.com/?q=The+Indeed+Condo+Phahonyothin+48",
     "imageUrl": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Fully Furnished", "Communal Gym", "Direct MEA Meter", "Elevator", "Keycard Gate", "CCTV"]
+    "amenities": [
+      "Fully Furnished",
+      "Communal Gym",
+      "Direct MEA Meter",
+      "Elevator",
+      "Keycard Gate",
+      "CCTV"
+    ]
   },
   {
     "id": "bangkhen-condo-wynn52",
@@ -457,7 +595,14 @@
     "safetyScore": 95,
     "googleMapsUrl": "https://maps.google.com/?q=Wynn+Condo+Phaholyothin+52",
     "imageUrl": "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Duplex Lobby", "Swimming Pool", "Fitness Gym", "Direct MEA Meter", "Keycard Entry", "Parking Space"]
+    "amenities": [
+      "Duplex Lobby",
+      "Swimming Pool",
+      "Fitness Gym",
+      "Direct MEA Meter",
+      "Keycard Entry",
+      "Parking Space"
+    ]
   },
   {
     "id": "bangkhen-condo-regenthome1",
@@ -477,7 +622,13 @@
     "safetyScore": 92,
     "googleMapsUrl": "https://maps.google.com/?q=Regent+Home+1+Phaholyothin+67",
     "imageUrl": "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Spacious Studio", "Direct MEA Meter", "Elevator", "Communal Parking", "24/7 Guard Service"]
+    "amenities": [
+      "Spacious Studio",
+      "Direct MEA Meter",
+      "Elevator",
+      "Communal Parking",
+      "24/7 Guard Service"
+    ]
   },
   {
     "id": "bangkhen-apt-scmansion",
@@ -492,12 +643,18 @@
     "advanceRentMonths": 1,
     "totalMoveInCash": 5800,
     "electricityBilling": "Private Sub-Meter: 8.0 THB/unit",
-    "electricityRate": 8.0,
+    "electricityRate": 8,
     "isGovernmentMeter": false,
     "safetyScore": 93,
     "googleMapsUrl": "https://maps.google.com/?q=SC+Mansion+Chaengwattana+4",
     "imageUrl": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Air Conditioning", "Private Balcony", "Keycard Door Access", "Coin Laundry", "Motorcycle Bays"]
+    "amenities": [
+      "Air Conditioning",
+      "Private Balcony",
+      "Keycard Door Access",
+      "Coin Laundry",
+      "Motorcycle Bays"
+    ]
   },
   {
     "id": "bangkhen-apt-b8rooms",
@@ -517,7 +674,13 @@
     "safetyScore": 96,
     "googleMapsUrl": "https://maps.google.com/?q=B8Rooms+Bangkhen",
     "imageUrl": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Boutique Interior", "Water Heater", "Free Hi-Speed Wi-Fi", "Keycard Entry", "CCTV Surveillance"]
+    "amenities": [
+      "Boutique Interior",
+      "Water Heater",
+      "Free Hi-Speed Wi-Fi",
+      "Keycard Entry",
+      "CCTV Surveillance"
+    ]
   },
   {
     "id": "bangkhen-apt-tomilatplakhao",
@@ -537,7 +700,13 @@
     "safetyScore": 95,
     "googleMapsUrl": "https://maps.google.com/?q=Tomi+Ladplakhao",
     "imageUrl": "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Modern Fitted Wardrobe", "Air Conditioning", "Keycard Access Gate", "Motorcycle Bays", "CCTV"]
+    "amenities": [
+      "Modern Fitted Wardrobe",
+      "Air Conditioning",
+      "Keycard Access Gate",
+      "Motorcycle Bays",
+      "CCTV"
+    ]
   },
   {
     "id": "bangkhen-apt-setthihouse",
@@ -552,12 +721,18 @@
     "advanceRentMonths": 1,
     "totalMoveInCash": 10400,
     "electricityBilling": "Private Sub-Meter: 7.0 THB/unit",
-    "electricityRate": 7.0,
+    "electricityRate": 7,
     "isGovernmentMeter": false,
     "safetyScore": 94,
     "googleMapsUrl": "https://maps.google.com/?q=Setthi+House+Latplakhao",
     "imageUrl": "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["En-suite Bathroom", "Balcony", "Free Wi-Fi", "Keycard Door", "Coin Laundry Machines"]
+    "amenities": [
+      "En-suite Bathroom",
+      "Balcony",
+      "Free Wi-Fi",
+      "Keycard Door",
+      "Coin Laundry Machines"
+    ]
   },
   {
     "id": "bangkhen-apt-sundance",
@@ -572,12 +747,18 @@
     "advanceRentMonths": 1,
     "totalMoveInCash": 5200,
     "electricityBilling": "Private Sub-Meter: 7.0 THB/unit",
-    "electricityRate": 7.0,
+    "electricityRate": 7,
     "isGovernmentMeter": false,
     "safetyScore": 92,
     "googleMapsUrl": "https://maps.google.com/?q=Sundance+Apartment+Latplakhao",
     "imageUrl": "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Standard Furnishing", "Private Bathroom", "Keycard Entry", "CCTV", "Drinking Water Refill"]
+    "amenities": [
+      "Standard Furnishing",
+      "Private Bathroom",
+      "Keycard Entry",
+      "CCTV",
+      "Drinking Water Refill"
+    ]
   },
   {
     "id": "bangkhen-apt-siriphasuk",
@@ -592,12 +773,18 @@
     "advanceRentMonths": 1,
     "totalMoveInCash": 6400,
     "electricityBilling": "Private Sub-Meter: 7.0 THB/unit",
-    "electricityRate": 7.0,
+    "electricityRate": 7,
     "isGovernmentMeter": false,
     "safetyScore": 93,
     "googleMapsUrl": "https://maps.google.com/?q=Siriphasuk+Apartment+Ramintra+39",
     "imageUrl": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Air Conditioning", "Private Balcony", "Keycard Gate", "Motorcycle Parking", "CCTV"]
+    "amenities": [
+      "Air Conditioning",
+      "Private Balcony",
+      "Keycard Gate",
+      "Motorcycle Parking",
+      "CCTV"
+    ]
   },
   {
     "id": "bangkhen-apt-theliving23",
@@ -617,7 +804,13 @@
     "safetyScore": 93,
     "googleMapsUrl": "https://maps.google.com/?q=The+Living+Ramintra+23",
     "imageUrl": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Air Conditioning", "Attached Bathroom", "Keycard Entry", "Water Heater", "CCTV"]
+    "amenities": [
+      "Air Conditioning",
+      "Attached Bathroom",
+      "Keycard Entry",
+      "Water Heater",
+      "CCTV"
+    ]
   },
   {
     "id": "bangkhen-apt-baanploen",
@@ -637,7 +830,13 @@
     "safetyScore": 94,
     "googleMapsUrl": "https://maps.google.com/?q=Baan+Ploen+Bangkok+Bangkhen",
     "imageUrl": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Fully Furnished", "Air Conditioning", "Keycard Entry", "Elevator", "Security Surveillance"]
+    "amenities": [
+      "Fully Furnished",
+      "Air Conditioning",
+      "Keycard Entry",
+      "Elevator",
+      "Security Surveillance"
+    ]
   },
   {
     "id": "bangkhen-apt-evergreen59",
@@ -652,12 +851,18 @@
     "advanceRentMonths": 1,
     "totalMoveInCash": 5600,
     "electricityBilling": "Private Sub-Meter: 7.0 THB/unit",
-    "electricityRate": 7.0,
+    "electricityRate": 7,
     "isGovernmentMeter": false,
     "safetyScore": 92,
     "googleMapsUrl": "https://maps.google.com/?q=Evergreen+Place+Phahol+59",
     "imageUrl": "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Attached Bathroom", "Balcony", "Keycard Entry", "Coin Laundry", "Motorcycle Bay"]
+    "amenities": [
+      "Attached Bathroom",
+      "Balcony",
+      "Keycard Entry",
+      "Coin Laundry",
+      "Motorcycle Bay"
+    ]
   },
   {
     "id": "bangkhen-apt-mindhouse",
@@ -677,6 +882,586 @@
     "safetyScore": 94,
     "googleMapsUrl": "https://maps.google.com/?q=Mind+House+Watcharaphon",
     "imageUrl": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80",
-    "amenities": ["Air Conditioning", "Keycard Access Gate", "Free Wi-Fi", "Dedicated Surface Parking", "CCTV"]
+    "amenities": [
+      "Air Conditioning",
+      "Keycard Access Gate",
+      "Free Wi-Fi",
+      "Dedicated Surface Parking",
+      "CCTV"
+    ]
+  },
+  {
+    "id": "bangbon-condo-lumpini48",
+    "name": "Lumpini Condotown Ekachai 48",
+    "type": "Condominium",
+    "district": "Bang Bon",
+    "transit": "Ekkachai Rd / Near Bang Bon Market",
+    "address": "206 Ekkachai Rd, Khlong Bang Phran, Bang Bon, Bangkok 10150",
+    "rent": 5500,
+    "sizeSqm": 28,
+    "depositMonths": 2,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 16500,
+    "electricityBilling": "Direct MEA Government Meter (~4.5 THB/unit)",
+    "electricityRate": 4.5,
+    "isGovernmentMeter": true,
+    "safetyScore": 98,
+    "googleMapsUrl": "https://maps.google.com/?cid=1230388998367199559",
+    "imageUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Keycard Access",
+      "Communal Parking",
+      "7-Eleven Nearby",
+      "24/7 Security",
+      "Swimming Pool",
+      "Fitness Center"
+    ]
+  },
+  {
+    "id": "bangbon-condo-modern",
+    "name": "Modern Condo - กำนันแม้น 3",
+    "type": "Condominium",
+    "district": "Bang Bon",
+    "transit": "Kamnan Maen 3 / Ekkachai Connection",
+    "address": "58 Kamnan Maen 3 Alley, Khlong Bang Phran, Bang Bon, Bangkok 10150",
+    "rent": 5500,
+    "sizeSqm": 28,
+    "depositMonths": 2,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 16500,
+    "electricityBilling": "Direct MEA Government Meter (~4.5 THB/unit)",
+    "electricityRate": 4.5,
+    "isGovernmentMeter": true,
+    "safetyScore": 97,
+    "googleMapsUrl": "https://maps.google.com/?cid=7729285603769120460",
+    "imageUrl": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Fitness Center",
+      "Covered Parking",
+      "CCTV",
+      "Balcony",
+      "Security Guard"
+    ]
+  },
+  {
+    "id": "bangbon-condo-srithong",
+    "name": "Srithong Condominium",
+    "type": "Condominium",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 40 / Wat Sing SRT Feeder",
+    "address": "106/33 Soi Ekkachai 40, Khlong Bang Phran, Bang Bon, Bangkok 10150",
+    "rent": 4200,
+    "sizeSqm": 29,
+    "depositMonths": 2,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 12600,
+    "electricityBilling": "Direct MEA Government Meter (~4.5 THB/unit)",
+    "electricityRate": 4.5,
+    "isGovernmentMeter": true,
+    "safetyScore": 92,
+    "googleMapsUrl": "https://maps.google.com/?q=Srithong+Condominium+Ekkachai+40+Bang+Bon+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Elevator",
+      "Direct MEA Meter",
+      "Balcony",
+      "Motorcycle Parking",
+      "Gated Security"
+    ]
+  },
+  {
+    "id": "bangbon-condo-wongwaen",
+    "name": "Wongwaen Complex",
+    "type": "Condominium",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 88 / Kanchanaphisek Expressway",
+    "address": "67/34 Soi Ekkachai 88, Khlong Bang Phran, Bang Bon, Bangkok 10150",
+    "rent": 4000,
+    "sizeSqm": 32,
+    "depositMonths": 2,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 12000,
+    "electricityBilling": "Direct MEA Government Meter (~4.5 THB/unit)",
+    "electricityRate": 4.5,
+    "isGovernmentMeter": true,
+    "safetyScore": 91,
+    "googleMapsUrl": "https://maps.google.com/?q=Wongwaen+Complex+Ekkachai+88+Bang+Bon+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Parking Space",
+      "Keycard Entry",
+      "Elevator",
+      "24/7 Security",
+      "Direct MEA Meter"
+    ]
+  },
+  {
+    "id": "bangbon-condo-yutitham",
+    "name": "Yutitham Tower",
+    "type": "Condominium",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 66 Yeak 1",
+    "address": "73/1-73/2 Soi Ekkachai 66 Yeak 1, Khlong Bang Phran, Bang Bon, Bangkok 10150",
+    "rent": 4800,
+    "sizeSqm": 26,
+    "depositMonths": 2,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 14400,
+    "electricityBilling": "Direct MEA Government Meter (~4.5 THB/unit)",
+    "electricityRate": 4.5,
+    "isGovernmentMeter": true,
+    "safetyScore": 96,
+    "googleMapsUrl": "https://maps.google.com/?cid=5254544529472415521",
+    "imageUrl": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Elevator",
+      "Security Guard",
+      "Close to Food Stalls",
+      "Balcony",
+      "Direct MEA Meter"
+    ]
+  },
+  {
+    "id": "bangbon-apt-mthouse",
+    "name": "M.T. House Bangbon",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi Kamnan Maen 11 / Big C Bang Bon",
+    "address": "Soi Kamnan Maen 11, Kamnan Maen Rd, Bang Bon, Bang Bon, Bangkok 10150",
+    "rent": 3600,
+    "sizeSqm": 25,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 7200,
+    "electricityBilling": "Private Sub-Meter: 5.0 THB/unit (Low Surcharge)",
+    "electricityRate": 5,
+    "isGovernmentMeter": false,
+    "safetyScore": 95,
+    "googleMapsUrl": "https://maps.google.com/?q=MT+House+Kamnan+Maen+11+Bang+Bon+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Elevator",
+      "Keycard Door",
+      "CCTV",
+      "Air Conditioning",
+      "Free High-Speed Wi-Fi",
+      "Motorcycle Parking"
+    ]
+  },
+  {
+    "id": "bangbon-apt-rommai",
+    "name": "Rommai @ Ekkachai",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 66/2 / Near Makro Bang Bon",
+    "address": "Soi Ekkachai 66/2, Ekkachai Rd, Khlong Bang Bon, Bang Bon, Bangkok 10150",
+    "rent": 5500,
+    "sizeSqm": 34,
+    "depositMonths": 2,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 16500,
+    "electricityBilling": "Private Sub-Meter: 8.0 THB/unit",
+    "electricityRate": 8,
+    "isGovernmentMeter": false,
+    "safetyScore": 97,
+    "googleMapsUrl": "https://maps.google.com/?q=Rommai+at+Ekkachai+Soi+66/2+Bang+Bon+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Furnished Living Room",
+      "Modern Security System",
+      "Free Wi-Fi",
+      "Laundry Service",
+      "Private Balcony"
+    ]
+  },
+  {
+    "id": "bangbon-apt-theresthaus",
+    "name": "The Rest Haus",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 69 / Central Rama 2 Access",
+    "address": "Soi Ekkachai 69, Ekkachai Rd, Khlong Bang Bon, Bang Bon, Bangkok 10150",
+    "rent": 4500,
+    "sizeSqm": 28,
+    "depositMonths": 2,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 13500,
+    "electricityBilling": "Private Sub-Meter: 8.0 THB/unit",
+    "electricityRate": 8,
+    "isGovernmentMeter": false,
+    "safetyScore": 96,
+    "googleMapsUrl": "https://maps.google.com/?q=The+Rest+Haus+Ekkachai+69+Bang+Bon+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Brand New Interior",
+      "Kitchen Sink",
+      "Water Heater",
+      "CCTV 24h",
+      "Covered Parking"
+    ]
+  },
+  {
+    "id": "bangbon-apt-theone",
+    "name": "The One Apartment (เอกชัย 102/2)",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Bus Lines 43, 120 / Soi Ekkachai 102/2",
+    "address": "Soi Ekkachai 102/2, Ekkachai Rd, Bang Bon, Bang Bon, Bangkok 10150",
+    "rent": 3500,
+    "sizeSqm": 22,
+    "depositMonths": 1,
+    "advanceRentMonths": 0,
+    "totalMoveInCash": 3500,
+    "electricityBilling": "Private Sub-Meter: 8.0 THB/unit",
+    "electricityRate": 8,
+    "isGovernmentMeter": false,
+    "safetyScore": 94,
+    "googleMapsUrl": "https://goo.gl/maps/Lqtgz93WEDH2",
+    "imageUrl": "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Zero Advance Promotion",
+      "Private Balcony",
+      "Air Conditioning",
+      "Free Wi-Fi",
+      "Keycard Entry"
+    ]
+  },
+  {
+    "id": "bangbon-apt-ekachai72",
+    "name": "Ekachai 72 Mansion",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 72 / Makro Bang Bon",
+    "address": "Soi Ekkachai 72, Ekkachai Rd, Bang Bon, Bang Bon, Bangkok 10150",
+    "rent": 2800,
+    "sizeSqm": 24,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 5600,
+    "electricityBilling": "Private Sub-Meter: 7.0 THB/unit",
+    "electricityRate": 7,
+    "isGovernmentMeter": false,
+    "safetyScore": 93,
+    "googleMapsUrl": "https://maps.google.com/?q=Ekachai+72+Mansion+Bang+Bon+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Private Balcony",
+      "Attached Bathroom",
+      "CCTV",
+      "Motorcycle Parking",
+      "Convenience Shops Nearby"
+    ]
+  },
+  {
+    "id": "bangbon-apt-ekachai",
+    "name": "Ekachai Apartment (เอกชัย 76)",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 76 / Ekkachai-Bang Khun Thian Rd",
+    "address": "Soi Ekkachai 76, Ekkachai Rd, Bang Bon, Bang Bon, Bangkok 10150",
+    "rent": 2500,
+    "sizeSqm": 22,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 5000,
+    "electricityBilling": "Private Sub-Meter: 6.0 THB/unit",
+    "electricityRate": 6,
+    "isGovernmentMeter": false,
+    "safetyScore": 92,
+    "googleMapsUrl": "https://maps.google.com/?q=Ekachai+Apartment+Soi+76+Bang+Bon+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Free Wi-Fi",
+      "Keycard Entry",
+      "Private Bathroom",
+      "Security Cameras",
+      "On-site Retail"
+    ]
+  },
+  {
+    "id": "bangbon-apt-stp66",
+    "name": "STP Mansion Ekachai 66",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 66 Yeak 1-1 / Samban Market",
+    "address": "Soi Ekkachai 66 Yeak 1-1, Khlong Bang Phran, Bang Bon, Bangkok 10150",
+    "rent": 2900,
+    "sizeSqm": 25,
+    "depositMonths": 1,
+    "advanceRentMonths": 0,
+    "totalMoveInCash": 6900,
+    "electricityBilling": "Private Sub-Meter: 8.0 THB/unit",
+    "electricityRate": 8,
+    "isGovernmentMeter": false,
+    "safetyScore": 94,
+    "googleMapsUrl": "https://goo.gl/maps/VeD89KrUfFPjRKgV8",
+    "imageUrl": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Zero Advance Rent Policy",
+      "Spacious Balcony",
+      "Free Wi-Fi",
+      "Parking Lot",
+      "CCTV Surveillance"
+    ]
+  },
+  {
+    "id": "bangbon-apt-sathaporn",
+    "name": "Sathaporn Mansion",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 66 / 300m to Main Road",
+    "address": "Soi Ekkachai 66, Ekkachai Rd, Bang Bon, Bang Bon, Bangkok 10150",
+    "rent": 2450,
+    "sizeSqm": 23,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 4650,
+    "electricityBilling": "Private Sub-Meter: 5.5 THB/unit",
+    "electricityRate": 5.5,
+    "isGovernmentMeter": false,
+    "safetyScore": 92,
+    "googleMapsUrl": "https://maps.google.com/?q=Sathaporn+Mansion+Ekkachai+66+Bang+Bon+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Motorcycle Taxi Stand On-Site",
+      "Low Sub-meter Rate",
+      "CCTV 24h",
+      "Drinking Water Dispensers",
+      "Coin Laundry"
+    ]
+  },
+  {
+    "id": "bangbon-apt-theroom114",
+    "name": "The Room 114",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 114 / Western Outer Ring",
+    "address": "Soi Ekkachai 114, Ekkachai Rd, Bang Bon, Bang Bon, Bangkok 10150",
+    "rent": 3000,
+    "sizeSqm": 21,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 6000,
+    "electricityBilling": "Private Sub-Meter: 7.5 THB/unit",
+    "electricityRate": 7.5,
+    "isGovernmentMeter": false,
+    "safetyScore": 93,
+    "googleMapsUrl": "https://maps.google.com/?q=The+Room+114+Ekkachai+Bang+Bon+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Air Conditioning",
+      "Keycard Entry",
+      "Balcony",
+      "Motorcycle Bays",
+      "CCTV"
+    ]
+  },
+  {
+    "id": "bangbon-apt-theday",
+    "name": "The DAY Apartment",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 114 Soi 2",
+    "address": "Soi Ekkachai 114 Soi 2, Bang Bon Nuea, Bang Bon, Bangkok 10150",
+    "rent": 3800,
+    "sizeSqm": 21,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 7000,
+    "electricityBilling": "Private Sub-Meter: 7.5 THB/unit",
+    "electricityRate": 7.5,
+    "isGovernmentMeter": false,
+    "safetyScore": 94,
+    "googleMapsUrl": "https://maps.google.com/?q=The+DAY+Apartment+Ekkachai+114+Bang+Bon+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Fully Furnished",
+      "Air Conditioning",
+      "Free High-Speed Wi-Fi",
+      "Quiet Soi",
+      "Electronic Access"
+    ]
+  },
+  {
+    "id": "bangbon-apt-chaichana",
+    "name": "Chai Chana Apartment (DK 19)",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi DK 19 / Phraya Manthat Rd",
+    "address": "Soi DK 19, Phraya Manthat Ratchasi Phichit Rd, Khlong Bang Bon, Bang Bon, Bangkok 10150",
+    "rent": 2800,
+    "sizeSqm": 22,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 5600,
+    "electricityBilling": "Private Sub-Meter: 7.0 THB/unit",
+    "electricityRate": 7,
+    "isGovernmentMeter": false,
+    "safetyScore": 93,
+    "googleMapsUrl": "https://maps.google.com/?q=Chai+Chana+Apartment+DK+19+Bang+Bon+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "DK Zone Location",
+      "Keycard Entry",
+      "Coin Laundry Machines",
+      "CCTV",
+      "Balcony"
+    ]
+  },
+  {
+    "id": "bangbon-apt-sansuk",
+    "name": "Sansuk Place",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Bang Bon 3 Road / Sarasas Witaed Feeder",
+    "address": "291 Bang Bon 3 Rd, Bang Bon Nuea, Bang Bon, Bangkok 10150",
+    "rent": 3600,
+    "sizeSqm": 21,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 7200,
+    "electricityBilling": "Private Sub-Meter: 8.0 THB/unit",
+    "electricityRate": 8,
+    "isGovernmentMeter": false,
+    "safetyScore": 94,
+    "googleMapsUrl": "https://maps.google.com/?cid=14418733503683036597",
+    "imageUrl": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Air Conditioning",
+      "Private Bathroom",
+      "Free Wi-Fi",
+      "Covered Parking",
+      "Water Heater"
+    ]
+  },
+  {
+    "id": "bangbon-apt-bangbon3",
+    "name": "Hong Pak Bangbon 3 (Female Only)",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Bang Bon 3 Road / Bus Por.Or. 7",
+    "address": "Bang Bon 3 Rd, Bang Bon, Bang Bon, Bangkok 10150",
+    "rent": 2600,
+    "sizeSqm": 20,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 5200,
+    "electricityBilling": "Private Sub-Meter: 8.0 THB/unit",
+    "electricityRate": 8,
+    "isGovernmentMeter": false,
+    "safetyScore": 96,
+    "googleMapsUrl": "https://maps.google.com/?q=Hong+Pak+Bang+Bon+3+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Female Residents Only",
+      "CCTV on All Floors",
+      "Keycard Entry",
+      "Inverter AC Units",
+      "Motorcycle Bay"
+    ]
+  },
+  {
+    "id": "bangbon-apt-tungtong",
+    "name": "Tungtong Apartment",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Bang Bon 5 Road / Near Luang Phor Taweesak Hospital",
+    "address": "137/2 Bang Bon 5 Rd, Bang Bon Nuea, Bang Bon, Bangkok 10150",
+    "rent": 3000,
+    "sizeSqm": 22,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 6000,
+    "electricityBilling": "Private Sub-Meter: 7.0 THB/unit",
+    "electricityRate": 7,
+    "isGovernmentMeter": false,
+    "safetyScore": 94,
+    "googleMapsUrl": "https://maps.google.com/?q=Tungtong+Apartment+Bang+Bon+5+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Air Conditioning",
+      "Keycard Access",
+      "CCTV",
+      "Drinking Water Refill",
+      "Car & Bike Parking"
+    ]
+  },
+  {
+    "id": "bangbon-apt-youdee5",
+    "name": "Youdee @ Bangbon 5",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Bang Bon 5 Road / Near Ratchasittharam Tech",
+    "address": "Bang Bon 5 Rd, Bang Bon, Bang Bon, Bangkok 10150",
+    "rent": 2800,
+    "sizeSqm": 20,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 5600,
+    "electricityBilling": "Private Sub-Meter: 7.0 THB/unit",
+    "electricityRate": 7,
+    "isGovernmentMeter": false,
+    "safetyScore": 93,
+    "googleMapsUrl": "https://maps.google.com/?q=Youdee+Bang+Bon+5+Bangkok",
+    "imageUrl": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Water Heater",
+      "Keycard Gate",
+      "CCTV 24/7",
+      "Private Bathroom",
+      "Proximity to 7-Eleven"
+    ]
+  },
+  {
+    "id": "bangbon-apt-kk",
+    "name": "KK Apartment",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi Bang Bon 1/20 / Ekkachai Market",
+    "address": "91 Soi Bang Bon 1/20, Khlong Bang Phran, Bang Bon, Bangkok 10150",
+    "rent": 3500,
+    "sizeSqm": 22,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 7000,
+    "electricityBilling": "Private Sub-Meter: 7.0 THB/unit",
+    "electricityRate": 7,
+    "isGovernmentMeter": false,
+    "safetyScore": 95,
+    "googleMapsUrl": "https://maps.google.com/?cid=1835373640977427941",
+    "imageUrl": "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Furnished Room",
+      "Keycard Entry",
+      "Coin Laundry",
+      "Motorcycle Parking",
+      "CCTV"
+    ]
+  },
+  {
+    "id": "bangbon-apt-greentree",
+    "name": "The Green Tree",
+    "type": "Apartment / Dorm",
+    "district": "Bang Bon",
+    "transit": "Soi Ekkachai 87/1 / Khlong Bang Bon",
+    "address": "Soi Ekkachai 87/1, Ekkachai Rd, Bang Bon, Bangkok 10150",
+    "rent": 4300,
+    "sizeSqm": 24,
+    "depositMonths": 1,
+    "advanceRentMonths": 1,
+    "totalMoveInCash": 8600,
+    "electricityBilling": "Private Sub-Meter: 7.5 THB/unit",
+    "electricityRate": 7.5,
+    "isGovernmentMeter": false,
+    "safetyScore": 93,
+    "googleMapsUrl": "https://maps.google.com/?cid=9390024883941450256",
+    "imageUrl": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+    "amenities": [
+      "Garden Setting",
+      "Balcony",
+      "Parking Space",
+      "Keycard Entry",
+      "CCTV"
+    ]
   }
 ]
