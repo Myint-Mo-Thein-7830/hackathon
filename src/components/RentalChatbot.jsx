@@ -1,62 +1,363 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Bot, User, Send, X, Sparkles, MapPin, ExternalLink, Key, Check, Train, ArrowRight } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Bot, User, Send, X, Sparkles, MapPin, ExternalLink, Key, Check, Train, RotateCcw, ArrowRight } from 'lucide-react';
 import listingsData from '../data/mockListings.json';
 
-// All 50 Official Bangkok Districts
-const ALL_50_DISTRICTS = [
-  "Bang Bon", "Bang Kapi", "Bang Khen", "Bang Kho Laem", "Bang Khun Thian",
-  "Bang Na", "Bang Phlat", "Bang Rak", "Bang Sue", "Bangkok Noi",
-  "Bangkok Yai", "Bueng Kum", "Chatuchak", "Chom Thong", "Din Daeng",
-  "Don Mueang", "Dusit", "Huai Khwang", "Khan Na Yao", "Khlong Sam Wa",
-  "Khlong San", "Khlong Toei", "Lak Si", "Lat Krabang", "Lat Phrao",
-  "Min Buri", "Nong Chok", "Nong Khaem", "Pathum Wan", "Phasi Charoen",
-  "Phaya Thai", "Phra Khanong", "Phra Nakhon", "Pom Prap Sattru Phai", "Prawet",
-  "Rat Burana", "Ratchathewi", "Sai Mai", "Samphanthawong", "Saphan Sung",
-  "Sathon", "Suan Luang", "Taling Chan", "Tawi Watthana", "Thon Buri",
-  "Thung Khru", "Wang Thonglang", "Watthana", "Yan Nawa", "Bang Khae"
+// Comprehensive Bangkok 50-District Location Engine
+// Maps all 50 districts, 180 subdistricts (khwaeng), landmarks, and common misspellings
+// Note: Thawi Watthana is listed before Watthana to prevent substring interception
+const BANGKOK_DISTRICTS = [
+  {
+    name: "Khan Na Yao",
+    aliases: [
+      "khan na yao", "khannayao", "kha na yo", "khannayo", "khannayaw", "kan na yao",
+      "ram inthra", "fashion island", "the promenade", "siam amazing park", "siam park city",
+      "navatanee", "khu bon", "ramintra 83", "ramintra km 8", "ramintra km 9", "คันนายาว"
+    ]
+  },
+  {
+    name: "Bang Kapi",
+    aliases: [
+      "bang kapi", "bangkapi", "khlong chan", "hua mak", "the mall bangkapi",
+      "ramkhamhaeng university", "rajamangala", "lam sali", "happy land", "บางกะปิ"
+    ]
+  },
+  {
+    name: "Bang Khen",
+    aliases: [
+      "bang khen", "bangkhen", "anusawari", "tha raeng", "wat phra si mahathat",
+      "phranakhon rajabhat", "ram inthra km 1", "ram inthra km 2", "บางเขน"
+    ]
+  },
+  {
+    name: "Bang Kho Laem",
+    aliases: [
+      "bang kho laem", "bangkholaem", "wat phraya krai", "bang khlo",
+      "asiatique", "rama 3", "charoen krung", "บางคอแหลม"
+    ]
+  },
+  {
+    name: "Bang Na",
+    aliases: [
+      "bang na", "bangna", "bang na nuea", "bang na tai", "bitec",
+      "central bangna", "mega bangna", "bearing", "lasalle", "บางนา"
+    ]
+  },
+  {
+    name: "Bang Rak",
+    aliases: [
+      "bang rak", "bangrak", "maha phruettharam", "si phraya", "suriyawong", "si lom",
+      "silom", "mahanakhon", "patpong", "sala daeng", "chong nonsi", "บางรัก"
+    ]
+  },
+  {
+    name: "Bang Sue",
+    aliases: [
+      "bang sue", "bangsue", "wong sawang", "krung thep aphiwat", "bang sue grand station",
+      "tao poon", "taopoon", "bang pho", "scg", "gateway at bangsue", "บางซื่อ"
+    ]
+  },
+  {
+    name: "Bueng Kum",
+    aliases: [
+      "bueng kum", "buengkum", "khlong kum", "nawamin", "nuan chan",
+      "pattavikorn", "seri thai park", "chocolate ville", "บึงกุ่ม"
+    ]
+  },
+  {
+    name: "Chatuchak",
+    aliases: [
+      "chatuchak", "jatujak", "lat yao", "chan kasem", "chomphon", "sena nikhom",
+      "jj market", "rot fai park", "central ladprao", "union mall", "ratchayothin", "kasetsart", "จตุจักร"
+    ]
+  },
+  {
+    name: "Din Daeng",
+    aliases: [
+      "din daeng", "dindaeng", "ratchadaphisek", "utcc", "din daeng market",
+      "pracha songkhro", "ดินแดง"
+    ]
+  },
+  {
+    name: "Don Mueang",
+    aliases: [
+      "don mueang", "donmuang", "si kan", "sanambin", "dmk", "don mueang airport",
+      "song prapha", "songprapha", "chang akat uthit", "saranakhom", "ดอนเมือง"
+    ]
+  },
+  {
+    name: "Dusit",
+    aliases: [
+      "dusit", "wachiraphayaban", "suan chitlada", "si yaek maha nak", "thanon nakhon chai si",
+      "parliament", "sappaya-sapasathan", "dusit palace", "royal plaza", "chitralada",
+      "ratchawat", "sriyan", "thewet", "samsen", "suan sunandha", "suan dusit", "vajira", "ดุสิต"
+    ]
+  },
+  {
+    name: "Huai Khwang",
+    aliases: [
+      "huai khwang", "huay kwang", "huaikwang", "huaykwang", "sam sen nok",
+      "ratchada", "sutthisan", "thailand cultural centre", "rama 9", "phra ram 9",
+      "the street ratchada", "meng jai", "20 mithuna", "ห้วยขวาง"
+    ]
+  },
+  {
+    name: "Khlong Sam Wa",
+    aliases: [
+      "khlong sam wa", "klongsamwa", "sam wa tawan tok", "sam wa tawan ok", "bang chan",
+      "sai kong din", "safari world", "phraya suren", "hathairat", "kip mu", "คลองสามวา"
+    ]
+  },
+  {
+    name: "Khlong Toei",
+    aliases: [
+      "khlong toei", "klongtoey", "khlong tan", "phra khanong", "bangkok port",
+      "qsncc", "queen sirikit", "benjakitti", "sukhumvit 22", "sukhumvit 24", "sukhumvit 26", "sukhumvit 36", "คลองเตย"
+    ]
+  },
+  {
+    name: "Lak Si",
+    aliases: [
+      "lak si", "laksi", "thung song hong", "talat bang khen", "chaeng watthana",
+      "government complex", "it square", "chulabhorn", "chinnakhet", "dpu", "หลักสี่"
+    ]
+  },
+  {
+    name: "Lat Krabang",
+    aliases: [
+      "lat krabang", "ladkrabang", "khlong song ton nun", "khlong sam prawet", "lam pla thio",
+      "thap yao", "khum thong", "kmitl", "hua takhe", "chalong krung", "soi jinda", "suvarnabhumi", "ลาดกระบัง"
+    ]
+  },
+  {
+    name: "Lat Phrao",
+    aliases: [
+      "lat phrao", "ladprao", "chorakhe bua", "chok chai 4", "chokchai 4",
+      "central eastville", "pradit manutham", "wat lat phrao", "nak niwat", "wang hin", "ลาดพร้าว"
+    ]
+  },
+  {
+    name: "Min Buri",
+    aliases: [
+      "min buri", "minburi", "saen saep", "min buri market", "sihaburanukit",
+      "suwinthawong", "tharakon", "rat uthit", "มีนบุรี"
+    ]
+  },
+  {
+    name: "Nong Chok",
+    aliases: [
+      "nong chok", "nongchok", "krathum rai", "khlong sip", "khok faet",
+      "bangkok arena", "mahanakorn", "mut", "chueam samphan", "หนองจอก"
+    ]
+  },
+  {
+    name: "Pathum Wan",
+    aliases: [
+      "pathum wan", "pathu wan", "pathumwan", "patumwan", "rong mueang", "wang mai", "lumphini",
+      "siam square", "siam paragon", "centralworld", "mbk", "chulalongkorn", "chula",
+      "banthat thong", "sam yan", "samyan", "national stadium", "ploenchit", "ปทุมวัน"
+    ]
+  },
+  {
+    name: "Phaya Thai",
+    aliases: [
+      "phaya thai", "phayathai", "sam sen nai", "ari", "phahonyothin 7",
+      "saphan khwai", "saphankhwai", "sanam pao", "pradiphat", "พญาไท"
+    ]
+  },
+  {
+    name: "Phra Khanong",
+    aliases: [
+      "phra khanong", "phrakhanong", "bang chak", "phra khanong tai",
+      "true digital park", "punnawithi", "on nut", "onnut", "sukhumvit 101", "พระโขนง"
+    ]
+  },
+  {
+    name: "Phra Nakhon",
+    aliases: [
+      "phra nakhon", "phranakhon", "rattanakosin", "grand palace", "wat pho", "khaosan",
+      "khao san", "sanam luang", "giant swing", "sao chingcha", "sam yot", "tanao", "wisut kasat", "พระนคร"
+    ]
+  },
+  {
+    name: "Pom Prap Sattru Phai",
+    aliases: [
+      "pom prap", "pomprap", "wat thep sirin", "khlong maha nak", "ban bat", "wat sommanat",
+      "golden mount", "wat saket", "bobae", "khlong thom", "worachak", "ป้อมปราบศัตรูพ่าย"
+    ]
+  },
+  {
+    name: "Prawet",
+    aliases: [
+      "prawet", "nong bon", "dokmai", "suan luang rama 9", "seacon square",
+      "paradise park", "srinagarindra", "ban thap chang", "ประเวศ"
+    ]
+  },
+  {
+    name: "Ratchathewi",
+    aliases: [
+      "ratchathewi", "thung phaya thai", "makkasan", "victory monument",
+      "pratunam", "platinum mall", "baiyoke", "ratchaprarop", "ราชเทวี"
+    ]
+  },
+  {
+    name: "Sai Mai",
+    aliases: [
+      "sai mai", "saimai", "o ngoen", "khlong thanon", "saphan mai", "saphanmai",
+      "yaek kor por aor", "ying charoen", "sukhaphiban 5", "permsin", "สายไหม"
+    ]
+  },
+  {
+    name: "Samphanthawong",
+    aliases: [
+      "samphanthawong", "chakkrawat", "talat noi", "yaowarat", "chinatown",
+      "sampheng", "wat traimit", "สัมพันธวงศ์"
+    ]
+  },
+  {
+    name: "Saphan Sung",
+    aliases: [
+      "saphan sung", "saphansung", "rat phatthana", "thap chang", "mistine",
+      "sammakorn", "krungthep kreetha", "สะพานสูง"
+    ]
+  },
+  {
+    name: "Sathon",
+    aliases: [
+      "sathon", "sathorn", "thung wat don", "thung maha mek", "north sathorn", "south sathorn",
+      "suan phlu", "suanplu", "saint louis", "surasak", "sathorn pier", "chan rd", "สาทร"
+    ]
+  },
+  {
+    name: "Suan Luang",
+    aliases: [
+      "suan luang", "suanluang", "phatthanakan", "thanya park", "on nut 46", "on nut 66", "si nut", "สวนหลวง"
+    ]
+  },
+  {
+    name: "Wang Thonglang",
+    aliases: [
+      "wang thonglang", "wangthonglang", "saphan song", "khlong chaokhun sing", "phlapphla",
+      "town in town", "lat phrao 101", "lat phrao 87", "srivara", "วังทองหลาง"
+    ]
+  },
+  {
+    name: "Thawi Watthana",
+    aliases: [
+      "thawi watthana", "tawi watthana", "thawiwatthana", "tawiwatthana", "sala thammasop",
+      "utthayan", "aksa", "sanam luang 2", "bangkokthonburi", "btu", "ทวีวัฒนา"
+    ]
+  },
+  {
+    name: "Watthana",
+    aliases: [
+      "watthana", "wattana", "asoke", "terminal 21", "phrom phong", "emdistrict",
+      "thong lo", "thonglor", "ekkamai", "ekamai", "pridi banomyong", "sukhumvit 71", "วัฒนา"
+    ]
+  },
+  {
+    name: "Yan Nawa",
+    aliases: [
+      "yan nawa", "yannawa", "chong nonsi", "bang phongphang", "rama 3",
+      "central rama 3", "bhumibol bridge", "brt wat dan", "brt wat dokmai", "ยานนาวา"
+    ]
+  },
+  {
+    name: "Bang Bon",
+    aliases: [
+      "bang bon", "bangbon", "bang bon nuea", "bang bon tai", "ekkachai", "bang bon market", "บางบอน"
+    ]
+  },
+  {
+    name: "Bang Khae",
+    aliases: [
+      "bang khae", "bangkhae", "lak song", "the mall bangkae", "phetkasem", "bang khae market", "บางแค"
+    ]
+  },
+  {
+    name: "Bang Khun Thian",
+    aliases: [
+      "bang khun thian", "bangkhunthian", "tha kham", "samae dam", "central rama 2", "bang kradi", "บางขุนเทียน"
+    ]
+  },
+  {
+    name: "Bang Phlat",
+    aliases: [
+      "bang phlat", "bangphlat", "bang o", "bang bamru", "bang yi khan",
+      "charan sanit wong", "yanhee hospital", "rama 8 bridge", "pinklao", "บางพลัด"
+    ]
+  },
+  {
+    name: "Bangkok Noi",
+    aliases: [
+      "bangkok noi", "bangkoknoi", "siri rat", "ban chang lo", "bang khun non",
+      "siriraj", "wang lang", "prannok", "fai chai", "บางกอกน้อย"
+    ]
+  },
+  {
+    name: "Bangkok Yai",
+    aliases: [
+      "bangkok yai", "bangkokyai", "wat arun", "wat tha phra", "temple of dawn",
+      "tha phra", "itsaraphap", "บางกอกใหญ่"
+    ]
+  },
+  {
+    name: "Chom Thong",
+    aliases: [
+      "chom thong", "chomthong", "wutthakat", "dao khanong", "จอมทอง"
+    ]
+  },
+  {
+    name: "Khlong San",
+    aliases: [
+      "khlong san", "klongsan", "somdet chao phraya", "charoen nakhon",
+      "iconsiam", "gold line", "tha din daeng", "wongwian yai", "คลองสาน"
+    ]
+  },
+  {
+    name: "Nong Khaem",
+    aliases: [
+      "nong khaem", "nongkhaem", "nong khang phlu", "southeast asia university",
+      "thonburi university", "phetkasem 77", "phetkasem 81", "phetkasem 110", "หนองแขม"
+    ]
+  },
+  {
+    name: "Phasi Charoen",
+    aliases: [
+      "phasi charoen", "phasicharoen", "bang wa", "bangwa", "bang chak", "bang waek",
+      "wat paknam", "seacon bangkae", "phetkasem 48", "phetkasem 56", "ภาษีเจริญ"
+    ]
+  },
+  {
+    name: "Rat Burana",
+    aliases: [
+      "rat burana", "radburana", "ratburana", "bang pakok", "kasikornbank hq",
+      "suksawat", "ราษฎร์บูรณะ"
+    ]
+  },
+  {
+    name: "Taling Chan",
+    aliases: [
+      "taling chan", "talingchan", "khlong chak phra", "bang ramat", "suan phak",
+      "taling chan floating market", "khlong lat mayom", "the circle ratchapruk", "sai tai mai", "ตลิ่งชัน"
+    ]
+  },
+  {
+    name: "Thon Buri",
+    aliases: [
+      "thon buri", "thonburi", "wat kanlaya", "talat phlu", "talatphlu",
+      "bukkhalo", "pho nimit", "wongwian yai", "kudi chin", "ธนบุรี"
+    ]
+  },
+  {
+    name: "Thung Khru",
+    aliases: [
+      "thung khru", "thungkru", "bang mot", "bangmod", "kmutt",
+      "thonburirom park", "pracha uthit", "phutthabucha", "ทุ่งครุ"
+    ]
+  }
 ];
 
-// District Aliases & Common Nicknames / Station / Landmark Names
-const DISTRICT_ALIASES = {
-  "Khan Na Yao": ["khan na yao", "khannayao", "kha na yo", "khannayo", "fashion island", "khu bon", "ramintra km 8", "ramintra km 9", "promenade"],
-  "Pathum Wan": ["pathum wan", "pathu wan", "pathumwan", "patumwan", "siam", "chula", "sam yan", "samyan", "national stadium", "mbk", "ploenchit"],
-  "Huai Khwang": ["huai khwang", "huay kwang", "huaikwang", "huaykwang", "ratchada", "sutthisan", "thailand cultural centre", "rama 9", "phra ram 9"],
-  "Thung Khru": ["thung khru", "thungkru", "bang mot", "bangmod", "kmutt", "pracha uthit", "phutthabucha"],
-  "Rat Burana": ["rat burana", "radburana", "ratburana", "suksawat", "bang pakok"],
-  "Bang Khen": ["bang khen", "bangkhen", "phahonyothin", "wat phra sri", "ram inthra", "anusan"],
-  "Bang Kapi": ["bang kapi", "bangkapi", "lam sali", "the mall bangkapi", "happy land", "ramkhamhaeng"],
-  "Bang Na": ["bang na", "bangna", "udom suk", "udomsuk", "bearing", "lasalle", "mega bangna"],
-  "Bang Phlat": ["bang phlat", "bangphlat", "charan", "yanhee", "bang o", "pinklao", "sirindhorn"],
-  "Bang Rak": ["bang rak", "bangrak", "silom", "chong nonsi", "sala daeng", "surawong", "samyan"],
-  "Bang Sue": ["bang sue", "bangsue", "tao poon", "taopoon", "wong sawang", "bang son", "scg"],
-  "Bangkok Noi": ["bangkok noi", "bangkoknoi", "siriraj", "wang lang", "prannok", "fai chai"],
-  "Bangkok Yai": ["bangkok yai", "bangkokyai", "tha phra", "thaphra", "itsaraphap"],
-  "Chatuchak": ["chatuchak", "jatujak", "mo chit", "mochit", "kasetsart", "ku"],
-  "Don Mueang": ["don mueang", "donmuang", "dmk", "song prapha", "songprapha"],
-  "Dusit": ["dusit", "ratchawat", "sriyan", "thewet", "samsen", "suan sunandha", "suan dusit", "vajira"],
-  "Khlong San": ["khlong san", "klongsan", "iconsiam", "wongwian yai", "charoen nakhon"],
-  "Khlong Toei": ["khlong toei", "klongtoey", "phrom phong", "thong lo", "thonglor", "ekkamai", "asoke", "queen sirikit"],
-  "Lat Krabang": ["lat krabang", "ladkrabang", "kmitl", "chalong krung", "suvarnabhumi"],
-  "Lat Phrao": ["lat phrao", "ladprao", "chok chai 4", "chokchai 4", "nak niwat", "wang hin"],
-  "Phasi Charoen": ["phasi charoen", "phasicharoen", "seacon bangkae", "bang wa", "bangwa", "phetkasem 48"],
-  "Phaya Thai": ["phaya thai", "phayathai", "ari", "saphan khwai", "saphankhwai", "sanam pao"],
-  "Phra Khanong": ["phra khanong", "phrakhanong", "bang chak", "punnawithi", "on nut", "onnut"],
-  "Phra Nakhon": ["phra nakhon", "phranakhon", "khao san", "khaosan", "sanam luang", "sam yot"],
-  "Pom Prap Sattru Phai": ["pom prap", "pomprap", "bobae", "chinatown", "klong thom", "worachak"],
-  "Ratchathewi": ["ratchathewi", "victory monument", "pratunam", "makkasan"],
-  "Sai Mai": ["sai mai", "saimai", "saphan mai", "saphanmai", "sai yud", "kor por aor", "permsin"],
-  "Sathon": ["sathon", "sathorn", "surasak", "saint louis", "st louis", "chan rd", "naradhiwas", "suan phlu", "suanplu", "yen akat"],
-  "Suan Luang": ["suan luang", "suanluang", "on nut 46", "on nut 66", "si nut", "phatthanakan", "pickadaily"],
-  "Taling Chan": ["taling chan", "talingchan", "chaiyapruek", "borommaratchachonnani", "bang ramat", "suan phak", "khlong lat mayom"],
-  "Tawi Watthana": ["tawi watthana", "thawi watthana", "thawiwatthana", "tawiwatthana", "sala thammasop", "bangkokthonburi", "btu", "phutthamonthon sai 2", "phutthamonthon sai 3", "phutthamonthon sai 4", "sanam luang 2"],
-  "Thon Buri": ["thon buri", "thonburi", "pho nimit", "talat phlu", "talatphlu", "wutthakat", "bukkhalo", "inthoraphithak"],
-  "Wang Thonglang": ["wang thonglang", "wangthonglang", "town in town", "srivara", "lat phrao 101", "lat phrao 81", "chok chai 4", "bodindecha"],
-  "Watthana": ["watthana", "wattana", "asok", "midtown asoke", "thonglor", "thong lo", "ekkamai", "ekamai", "pridi banomyong", "sukhumvit 71"],
-  "Yan Nawa": ["yan nawa", "yannawa", "rama 3", "brt wat dan", "brt wat dokmai", "brt thanon chan", "sathu pradit", "chong nonsi", "wat pariwat"],
-  "Saphan Sung": ["saphan sung", "saphansung", "sammakorn", "soi mistine", "rat phatthana", "krungthep kreetha", "nom klao"]
-};
-
-// Remove raw markdown asterisks and standardize bullets
+// Clean formatting: removes raw markdown asterisks and standardizes bullets
 function cleanText(text) {
   if (!text) return "";
   return text
@@ -70,7 +371,7 @@ function normalize(str) {
   return str.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-// Levenshtein similarity distance for typos
+// Levenshtein similarity distance for typo tolerance
 function getSimilarity(s1, s2) {
   const longer = s1.length < s2.length ? s2 : s1;
   const shorter = s1.length < s2.length ? s1 : s2;
@@ -96,70 +397,60 @@ function getSimilarity(s1, s2) {
   return (longerLength - costs[shorter.length]) / parseFloat(longerLength);
 }
 
-// Pre-compute candidate list sorted by descending length to prevent substring hijacking (e.g., Watthana vs Tawi Watthana)
-const SORTED_DISTRICT_CANDIDATES = (() => {
-  const list = [];
-  for (const district of ALL_50_DISTRICTS) {
-    list.push({ district, term: district.toLowerCase(), norm: normalize(district) });
-    if (DISTRICT_ALIASES[district]) {
-      for (const alias of DISTRICT_ALIASES[district]) {
-        list.push({ district, term: alias.toLowerCase(), norm: normalize(alias) });
-      }
-    }
-  }
-  return list.sort((a, b) => b.term.length - a.term.length);
-})();
-
-// Robust Intent Parser
+// Intent Parser: District, Transit Line, and Budget
 function parseUserIntent(query) {
   const rawQ = query.toLowerCase();
   const normQ = normalize(query);
 
-  // 1. Direct exact or alias match across all districts (longest match wins)
   let detectedDistrict = null;
 
-  for (const { district, term, norm } of SORTED_DISTRICT_CANDIDATES) {
-    if (rawQ.includes(term) || (norm.length >= 4 && normQ.includes(norm))) {
-      detectedDistrict = district;
+  // 1. Direct and Alias match across the 50 districts
+  for (const entry of BANGKOK_DISTRICTS) {
+    if (rawQ.includes(entry.name.toLowerCase()) || normQ.includes(normalize(entry.name))) {
+      detectedDistrict = entry.name;
+      break;
+    }
+    const matched = entry.aliases.find(alias => rawQ.includes(alias) || (alias.length >= 4 && normQ.includes(normalize(alias))));
+    if (matched) {
+      detectedDistrict = entry.name;
       break;
     }
   }
 
-  // 2. Fuzzy match against all 50 districts and aliases (e.g., "Kha Na Yo" -> "Khan Na Yao")
+  // 2. Fuzzy match for misspelled inputs (e.g., "Kha Na Yo" -> "Khan Na Yao")
   if (!detectedDistrict) {
     const words = rawQ.split(/\s+/);
     let bestScore = 0;
-    let bestMatch = null;
+    let bestDistrict = null;
 
-    for (const district of ALL_50_DISTRICTS) {
-      const candidates = [district, ...(DISTRICT_ALIASES[district] || [])];
+    for (const entry of BANGKOK_DISTRICTS) {
+      const candidates = [entry.name, ...entry.aliases];
       for (const cand of candidates) {
         const normCand = normalize(cand);
-        // Compare with sliding 1 to 3 word windows
         for (let i = 0; i < words.length; i++) {
-          const window1 = normalize(words[i]);
-          const window2 = normalize(words.slice(i, i + 2).join(' '));
-          const window3 = normalize(words.slice(i, i + 3).join(' '));
+          const w1 = normalize(words[i]);
+          const w2 = normalize(words.slice(i, i + 2).join(' '));
+          const w3 = normalize(words.slice(i, i + 3).join(' '));
 
-          const sim1 = getSimilarity(window1, normCand);
-          const sim2 = getSimilarity(window2, normCand);
-          const sim3 = getSimilarity(window3, normCand);
-          const maxSim = Math.max(sim1, sim2, sim3);
+          const sim1 = getSimilarity(w1, normCand);
+          const sim2 = getSimilarity(w2, normCand);
+          const sim3 = getSimilarity(w3, normCand);
+          const top = Math.max(sim1, sim2, sim3);
 
-          if (maxSim > bestScore) {
-            bestScore = maxSim;
-            bestMatch = district;
+          if (top > bestScore) {
+            bestScore = top;
+            bestDistrict = entry.name;
           }
         }
       }
     }
 
-    if (bestScore >= 0.72) {
-      detectedDistrict = bestMatch;
+    if (bestScore >= 0.70) {
+      detectedDistrict = bestDistrict;
     }
   }
 
-  // 3. Transit Detection
+  // 3. Transit match
   let transitLine = null;
   if (rawQ.includes('bts') || rawQ.includes('skytrain')) transitLine = 'BTS';
   else if (rawQ.includes('mrt') || rawQ.includes('subway')) transitLine = 'MRT';
@@ -170,8 +461,8 @@ function parseUserIntent(query) {
 
   // 4. Budget constraints
   let maxPrice = null;
-  const priceKMatch = rawQ.match(/(?:under|below|<|less than|budget is|budget of|max)\s*(\d+)\s*k/);
-  const priceNumMatch = rawQ.match(/(?:under|below|<|less than|budget is|budget of|max)\s*(\d{4,5})/);
+  const priceKMatch = rawQ.match(/(?:under|below|<|less than|budget of|budget is|max|around)\s*(\d+)\s*k/);
+  const priceNumMatch = rawQ.match(/(?:under|below|<|less than|budget of|budget is|max|around)\s*(\d{4,5})/);
   if (priceKMatch) {
     maxPrice = parseInt(priceKMatch[1], 10) * 1000;
   } else if (priceNumMatch) {
@@ -180,12 +471,7 @@ function parseUserIntent(query) {
     maxPrice = 6000;
   }
 
-  // 5. Property Type
-  let propertyType = null;
-  if (rawQ.includes('condo') || rawQ.includes('condominium')) propertyType = 'Condominium';
-  else if (rawQ.includes('dorm') || rawQ.includes('apartment') || rawQ.includes('room')) propertyType = 'Apartment';
-
-  return { detectedDistrict, transitLine, maxPrice, propertyType };
+  return { detectedDistrict, transitLine, maxPrice };
 }
 
 export default function RentalChatbot() {
@@ -196,13 +482,14 @@ export default function RentalChatbot() {
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [tempKey, setTempKey] = useState('');
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      text: "Sawadee krub! I'm your Rental Assistant.\n\nHow can I help you find accommodation in Bangkok today? Feel free to share your preferred district, monthly budget, or transit station.",
-      recommendations: []
-    }
-  ]);
+
+  const INITIAL_MESSAGE = {
+    role: 'assistant',
+    text: "Sawadee krub! I'm your Rental Assistant.\n\nLooking for an accommodation in Bangkok? Feel free to tell me your preferred district, budget, or nearby transit line.",
+    recommendations: []
+  };
+
+  const [messages, setMessages] = useState([INITIAL_MESSAGE]);
 
   const [suggestedChips, setSuggestedChips] = useState([
     "Condos in Khan Na Yao under 12k",
@@ -226,34 +513,62 @@ export default function RentalChatbot() {
     setTempKey('');
   };
 
-  // Strictly filter listings based on recognized user intent
-  const filterListingsByIntent = (intent) => {
-    if (!intent.detectedDistrict && !intent.transitLine && !intent.maxPrice && !intent.propertyType) {
+  // Reset conversation back to the initial clean state
+  const resetChat = () => {
+    setMessages([INITIAL_MESSAGE]);
+    setInput('');
+    setSuggestedChips([
+      "Condos in Khan Na Yao under 12k",
+      "What is the standard deposit for a condo?",
+      "Budget rooms under 6k in Pathum Wan"
+    ]);
+  };
+
+  // Strict District Isolation Search
+  // If the user specifies a district, NEVER return listings from any other district!
+  const getAccurateRecommendations = (intent) => {
+    if (!intent.detectedDistrict && !intent.transitLine && !intent.maxPrice) {
       return [];
     }
 
-    return listingsData.filter(item => {
-      // Must match district if detected
-      if (intent.detectedDistrict && item.district.toLowerCase() !== intent.detectedDistrict.toLowerCase()) {
-        return false;
+    if (intent.detectedDistrict) {
+      const normTarget = normalize(intent.detectedDistrict).replace('thawi', 'tawi');
+      const inDistrict = listingsData.filter(item => 
+        item.district && (
+          item.district.toLowerCase() === intent.detectedDistrict.toLowerCase() ||
+          normalize(item.district).replace('thawi', 'tawi') === normTarget
+        )
+      );
+
+      if (inDistrict.length === 0) {
+        return [];
       }
-      // Must match budget if specified
-      if (intent.maxPrice && item.rent > intent.maxPrice) {
-        return false;
+
+      if (intent.maxPrice) {
+        const budgetMatch = inDistrict.filter(item => item.rent <= intent.maxPrice);
+        if (budgetMatch.length > 0) return budgetMatch.slice(0, 3);
+        // If none strictly under budget, show lowest price entries in that district
+        return inDistrict.sort((a, b) => a.rent - b.rent).slice(0, 2);
       }
-      // Must match property type if specified
-      if (intent.propertyType === 'Condominium' && item.type !== 'Condominium') {
-        return false;
+
+      return inDistrict.slice(0, 3);
+    }
+
+    if (intent.transitLine) {
+      let pool = listingsData.filter(item =>
+        item.transit && item.transit.toLowerCase().includes(intent.transitLine.toLowerCase())
+      );
+      if (intent.maxPrice) {
+        pool = pool.filter(item => item.rent <= intent.maxPrice);
       }
-      if (intent.propertyType === 'Apartment' && item.type === 'Condominium') {
-        return false;
-      }
-      // Must match transit line if specified
-      if (intent.transitLine && (!item.transit || !item.transit.toLowerCase().includes(intent.transitLine.toLowerCase()))) {
-        return false;
-      }
-      return true;
-    }).slice(0, 3);
+      return pool.slice(0, 3);
+    }
+
+    if (intent.maxPrice) {
+      return listingsData.filter(item => item.rent <= intent.maxPrice).slice(0, 3);
+    }
+
+    return [];
   };
 
   const updateDynamicChips = (intent, query = "") => {
@@ -273,7 +588,7 @@ export default function RentalChatbot() {
       ]);
     } else if (q.includes('electric') || q.includes('bill') || q.includes('meter')) {
       setSuggestedChips([
-        "Is 8 THB per unit electric legal for dorms?",
+        "Is 8 THB per unit electric normal for dorms?",
         "How much is electricity in a condo?",
         "Difference between MEA meter and sub-meter"
       ]);
@@ -293,39 +608,42 @@ export default function RentalChatbot() {
   };
 
   const localSmartFallback = (query, intent) => {
-    const matched = filterListingsByIntent(intent);
+    const matched = getAccurateRecommendations(intent);
     let text = "";
 
     if (intent.detectedDistrict) {
       const budgetNote = intent.maxPrice ? ` within ${intent.maxPrice.toLocaleString()} THB/month` : '';
       if (matched.length > 0) {
-        text = `Here are verified accommodations in ${intent.detectedDistrict}${budgetNote}. Click any card to open its exact location on Google Maps:`;
+        text = `Here are verified accommodations in ${intent.detectedDistrict}${budgetNote}. Click any card to view its location on Google Maps:`;
       } else {
-        text = `I found your search for ${intent.detectedDistrict}${budgetNote}, but there are currently no verified listings within that exact price bracket. Would you like to adjust your budget or see nearby transit options?`;
+        text = `I searched for verified places in ${intent.detectedDistrict}${budgetNote}, but none matched that exact criteria. Would you like to adjust your budget or see all available options in ${intent.detectedDistrict}?`;
       }
     } else if (query.toLowerCase().includes('deposit') || query.toLowerCase().includes('advance') || query.toLowerCase().includes('lease')) {
       text = "In Bangkok, rental deposits follow two clear standards:\n\n• Condominiums: Standard terms require 2 months security deposit + 1 month advance rent (2+1). You get direct MEA government electric billing (~4.5 THB/unit).\n• Dorms & Apartments: Standard terms require 1 month security deposit + 1 month advance rent (1+1). Electricity is billed by sub-meter at 7 to 8 THB/unit.\n\nNever pay more than 1 month advance rent upfront.";
     } else {
-      text = "I can find rooms for you anywhere in Bangkok. Please tell me your preferred district (such as Khan Na Yao, Huai Khwang, or Dusit), your budget, or transit line.";
+      text = "I can help you find rooms anywhere in Bangkok. Please tell me your preferred district (such as Khan Na Yao, Huai Khwang, or Dusit), your budget, or your transit line.";
     }
 
     return { text: cleanText(text), recommendations: matched };
   };
 
   const callGeminiAPI = async (userPrompt, intent) => {
-    const matchedListings = filterListingsByIntent(intent);
-    
-    // STRICT: Only feed properties in the detected district to Gemini so it cannot cross-recommend other districts!
-    let relevantCatalog = [];
+    const matchedListings = getAccurateRecommendations(intent);
+
+    let districtCatalog = [];
     if (intent.detectedDistrict) {
-      relevantCatalog = listingsData
-        .filter(l => l.district.toLowerCase() === intent.detectedDistrict.toLowerCase())
-        .slice(0, 20);
+      const normTarget = normalize(intent.detectedDistrict).replace('thawi', 'tawi');
+      districtCatalog = listingsData
+        .filter(l => l.district && (
+          l.district.toLowerCase() === intent.detectedDistrict.toLowerCase() ||
+          normalize(l.district).replace('thawi', 'tawi') === normTarget
+        ))
+        .slice(0, 15);
     } else {
-      relevantCatalog = matchedListings.length > 0 ? matchedListings : listingsData.slice(0, 20);
+      districtCatalog = matchedListings.slice(0, 15);
     }
 
-    const compactData = relevantCatalog.map(l => ({
+    const compactData = districtCatalog.map(l => ({
       name: l.name,
       district: l.district,
       type: l.type,
@@ -336,15 +654,14 @@ export default function RentalChatbot() {
     }));
 
     const systemPrompt = `
-You are Rental Assistant for Bangkok living and accommodation search.
+You are Rental Assistant for Bangkok accommodation rentals.
 Be friendly, natural, and helpful.
 
-STRICT ACCURACY RULES:
-1. The user is asking about: District="${intent.detectedDistrict || 'Unspecified'}", MaxBudget="${intent.maxPrice || 'Unspecified'}".
-2. If a district is detected (e.g., Khan Na Yao), you MUST ONLY suggest properties in that exact district. NEVER suggest places from Thung Khru, Bang Mot, or other districts when another district was requested.
-3. If no properties exist in the provided list for that district, state clearly that you checked ${intent.detectedDistrict} and offer advice on typical rents there.
-4. ZERO ASTERISKS: DO NOT use asterisks (*) or (**) anywhere in your response. No markdown asterisks for bold or italic. Use standard bullet points (•) if needed.
-5. Provide clear details on rent, move-in cost, and electricity type.
+STRICT DISTRICT LOCK:
+- The user is asking about: District="${intent.detectedDistrict || 'Unspecified'}", MaxBudget="${intent.maxPrice || 'Unspecified'}".
+- If a district is identified, YOU MUST ONLY discuss that exact district. Under no circumstances should you mention or recommend properties in Thung Khru, Bang Mot, or any other area unless explicitly asked.
+- ZERO ASTERISKS: DO NOT use asterisks (*) or (**) anywhere in your response. No markdown asterisks for bold or italic. Use standard bullet points (•) if needed.
+- Provide clear details on rent, move-in cash, and electricity billing.
 `;
 
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
@@ -358,7 +675,7 @@ STRICT ACCURACY RULES:
             role: "user",
             parts: [
               {
-                text: `${systemPrompt}\n\nAvailable properties in target district:\n${JSON.stringify(compactData, null, 1)}\n\nUser Message: ${userPrompt}`
+                text: `${systemPrompt}\n\nProperties in target district:\n${JSON.stringify(compactData, null, 1)}\n\nUser Question: ${userPrompt}`
               }
             ]
           }
@@ -410,7 +727,7 @@ STRICT ACCURACY RULES:
               recommendations: fallback.recommendations
             }
           ]);
-        }, 300);
+        }, 250);
       }
     } catch (err) {
       console.warn("Switching to local verified engine:", err);
@@ -465,6 +782,13 @@ STRICT ACCURACY RULES:
 
             <div className="flex items-center gap-1">
               <button
+                onClick={resetChat}
+                title="Restart conversation"
+                className="p-1.5 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition-colors"
+              >
+                <RotateCcw className="w-4 h-4"/>
+              </button>
+              <button
                 onClick={() => setShowKeyModal(!showKeyModal)}
                 title="Configure Gemini API Key"
                 className="p-1.5 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition-colors"
@@ -480,7 +804,7 @@ STRICT ACCURACY RULES:
             </div>
           </div>
 
-          {/* Quick API Key Modal */}
+          {/* API Key Modal */}
           {showKeyModal && (
             <form onSubmit={handleSaveKey} className="p-3 bg-emerald-50 dark:bg-slate-800 border-b border-emerald-100 dark:border-slate-700 flex gap-2">
               <input

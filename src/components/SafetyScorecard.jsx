@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import CostCalculator from './CostCalculator';
 import RedFlagHeatmap from './RedFlagHeatmap';
-import InquiryCopilot from './InquiryCopilot';
 
 export default function SafetyScorecard({ auditResult }) {
   if (!auditResult) return null;
@@ -115,9 +114,6 @@ export default function SafetyScorecard({ auditResult }) {
 
       {/* Section 2: Red-Flag Heatmap */}
       <RedFlagHeatmap redFlags={redFlags} propertyType={propertyType} />
-
-      {/* Section 3: Landlord Inquiry Copilot */}
-      <InquiryCopilot script={inquiryScript} propertyType={propertyType} />
 
       {/* Domain Logic Transparency Card */}
       <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 text-xs text-slate-600 dark:text-slate-400 space-y-2">
