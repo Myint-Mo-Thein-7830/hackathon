@@ -18,7 +18,76 @@ export default function RentalChatbot() {
     }
   ]);
   const [isTyping, setIsTyping] = useState(false);
+  const [suggestedChips, setSuggestedChips] = useState([
+    "Recommend condos under 12k in Huai Khwang",
+    "What is the standard deposit for a condo?",
+    "Find student dorms near Dusit"
+  ]);
   const messagesEndRef = useRef(null);
+
+  // Heuristic engine to dynamically generate follow-up question chips based on conversation context
+  const updateSuggestedChips = (query, recommendations = []) => {
+    const q = query.toLowerCase();
+
+    // Check known districts in query or recommendations
+    const knownDistricts = [
+      "Huai Khwang", "Dusit", "Don Mueang", "Chatuchak", "Lat Krabang",
+      "Lat Phrao", "Min Buri", "Khlong San", "Khlong Toei", "Phasi Charoen",
+      "Phra Nakhon", "Bang Khen", "Bang Na", "Bang Sue", "Sai Mai", "Thung Khru",
+      "Bang Bon", "Bang Kapi", "Bang Kho Laem", "Bang Khun Thian", "Bang Phlat",
+      "Bang Rak", "Bangkok Noi", "Bangkok Yai", "Bueng Kum", "Chom Thong",
+      "Din Daeng", "Khan Na Yao", "Khlong Sam Wa", "Lak Si", "Nong Chok",
+      "Nong Khaem", "Pathum Wan", "Phaya Thai", "Phra Khanong", "Pom Prap Sattru Phai",
+      "Prawet", "Rat Burana", "Ratchathewi", "Saphan Sung"
+    ];
+
+    let detectedDistrict = knownDistricts.find(d => q.includes(d.toLowerCase()));
+    if (!detectedDistrict && recommendations.length > 0 && recommendations[0].district) {
+      detectedDistrict = recommendations[0].district;
+    }
+
+    let newChips = [];
+
+    if (detectedDistrict) {
+      newChips = [
+        `Condos with direct MEA meter in ${detectedDistrict}`,
+        `Budget dorms under 6k in ${detectedDistrict}`,
+        `Proximity to BTS/MRT in ${detectedDistrict}`
+      ];
+    } else if (q.includes('deposit') || q.includes('advance') || q.includes('lease') || q.includes('contract') || q.includes('cost') || q.includes('rule')) {
+      newChips = [
+        "What is direct MEA government electricity rate?",
+        "Can a landlord legally demand 3 months deposit?",
+        "Show rooms with standard 1+1 deposit"
+      ];
+    } else if (q.includes('student') || q.includes('dorm') || q.includes('cheap') || q.includes('budget') || q.includes('university') || q.includes('campus')) {
+      newChips = [
+        "Dorms near KMUTT Bang Mot under 5k",
+        "Student apartments near Kasetsart / Saphan Mai",
+        "Affordable rooms near Lat Krabang KMITL"
+      ];
+    } else if (q.includes('bts') || q.includes('mrt') || q.includes('transit') || q.includes('station') || q.includes('train')) {
+      newChips = [
+        "Condos within 500m of BTS Sukhumvit",
+        "MRT Blue Line rooms under 10k",
+        "Rooms near SRT Don Mueang Red Line"
+      ];
+    } else if (q.includes('condo')) {
+      newChips = [
+        "Condos with direct MEA electricity (~4.5 THB)",
+        "Pet-friendly condos under 15k in Bangkok",
+        "What is the standard (2+1) condo move-in cost?"
+      ];
+    } else {
+      newChips = [
+        "Recommend condos under 12k in Huai Khwang",
+        "What is the standard deposit for an apartment?",
+        "Find verified dorms near Dusit universities"
+      ];
+    }
+
+    setSuggestedChips(newChips);
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -120,6 +189,7 @@ Instructions:
       if (apiKey) {
         const botReply = await callGeminiAPI(textToSend);
         setMessages(prev => [...prev, { role: 'assistant', text: botReply, recommendations: [] }]);
+        updateSuggestedChips(textToSend);
       } else {
         // Run local fallback when API key is not yet configured
         setTimeout(() => {
@@ -132,6 +202,7 @@ Instructions:
               recommendations: fallback.recommendations
             }
           ]);
+          updateSuggestedChips(textToSend, fallback.recommendations);
         }, 400);
       }
     } catch (err) {
@@ -145,6 +216,7 @@ Instructions:
           recommendations: fallback.recommendations
         }
       ]);
+      updateSuggestedChips(textToSend, fallback.recommendations);
     } finally {
       setIsTyping(false);
     }
@@ -288,26 +360,17 @@ Instructions:
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Prompt Chips */}
+          {/* Quick Prompt Chips (Dynamic Contextual) */}
           <div className="px-3 py-2 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex gap-1.5 overflow-x-auto no-scrollbar shrink-0">
-            <button
-              onClick={() => handleSend("Recommend condos under 12k in Huai Khwang")}
-              className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 whitespace-nowrap transition-colors"
-            >
-              Under 12k in Huai Khwang?
-            </button>
-            <button
-              onClick={() => handleSend("What is the standard deposit for a condo in Bangkok?")}
-              className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 whitespace-nowrap transition-colors"
-            >
-              Deposit standard?
-            </button>
-            <button
-              onClick={() => handleSend("Find student dorms near Dusit universities")}
-              className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 whitespace-nowrap transition-colors"
-            >
-              Dorms in Dusit?
-            </button>
+            {suggestedChips.map((chip, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleSend(chip)}
+                className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950 dark:hover:text-emerald-300 whitespace-nowrap transition-colors"
+              >
+                {chip}
+              </button>
+            ))}
           </div>
 
           {/* Input Footer */}
