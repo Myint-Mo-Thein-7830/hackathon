@@ -94,6 +94,31 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) 
     return filteredListings.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredListings, currentPage]);
 
+  // Sliding window pagination to prevent horizontal overflow
+  const visiblePages = useMemo(() => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const pages = [];
+    let left = currentPage - 1;
+    let right = currentPage + 1;
+
+    if (left <= 2) {
+      left = 2;
+      right = 4;
+    } else if (right >= totalPages - 1) {
+      left = totalPages - 3;
+      right = totalPages - 1;
+    }
+
+    pages.push(1);
+    if (left > 2) pages.push('...');
+    for (let i = left; i <= right; i++) pages.push(i);
+    if (right < totalPages - 1) pages.push('...');
+    pages.push(totalPages);
+    return pages;
+  }, [totalPages, currentPage]);
+
   const handleResetFilters = () => {
     setSearchQuery('');
     setPropertyFilter('All');
@@ -386,14 +411,14 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) 
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center space-x-3 pt-4">
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-6 max-w-full overflow-hidden">
           <button
             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className={`p-2 rounded-xl border flex items-center space-x-1 text-xs font-semibold transition-all ${
+            className={`px-3 py-2 rounded-xl border flex items-center space-x-1 text-xs font-semibold transition-all ${
               currentPage === 1
-                ? 'bg-slate-100 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed'
-                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'bg-slate-100 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed opacity-50'
+                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-sm'
             }`}
           >
             <ChevronLeft className="w-4 h-4" />
@@ -401,33 +426,51 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) 
           </button>
 
           <div className="flex items-center space-x-1">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
-              <button
-                key={pageNum}
-                onClick={() => setCurrentPage(pageNum)}
-                className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
-                  currentPage === pageNum
-                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
-                    : 'bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                {pageNum}
-              </button>
-            ))}
+            {visiblePages.map((item, idx) => {
+              if (item === '...') {
+                return (
+                  <span
+                    key={`ellipsis-${idx}`}
+                    className="w-8 h-8 flex items-center justify-center text-xs font-bold text-slate-400 dark:text-slate-500 select-none"
+                  >
+                    ...
+                  </span>
+                );
+              }
+              const pageNum = item;
+              return (
+                <button
+                  key={pageNum}
+                  onClick={() => setCurrentPage(pageNum)}
+                  className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
+                    currentPage === pageNum
+                      ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
+                      : 'bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              );
+            })}
           </div>
 
           <button
             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className={`p-2 rounded-xl border flex items-center space-x-1 text-xs font-semibold transition-all ${
+            className={`px-3 py-2 rounded-xl border flex items-center space-x-1 text-xs font-semibold transition-all ${
               currentPage === totalPages
-                ? 'bg-slate-100 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed'
-                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'bg-slate-100 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed opacity-50'
+                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-sm'
             }`}
           >
             <span className="hidden sm:inline">Next</span>
             <ChevronRight className="w-4 h-4" />
           </button>
+
+          {/* Page context text */}
+          <span className="text-[11px] text-slate-400 dark:text-slate-500 ml-2 hidden sm:inline">
+            Page {currentPage} of {totalPages}
+          </span>
         </div>
       )}
 
