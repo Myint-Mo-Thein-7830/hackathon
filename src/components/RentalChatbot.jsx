@@ -1,6 +1,131 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Bot, User, Send, X, Sparkles, MapPin, ExternalLink, Key, Check, HelpCircle } from 'lucide-react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { Bot, User, Send, X, Sparkles, MapPin, ExternalLink, Key, Check, Train, DollarSign } from 'lucide-react';
 import listingsData from '../data/mockListings.json';
+
+// Official 50 Districts + Aliases + Typo Tolerance
+const DISTRICT_ALIASES = {
+  "Pathum Wan": ["pathu wan", "pathumwan", "patumwan", "siam", "chula", "samyan", "national stadium", "mbk", "ploenchit"],
+  "Huai Khwang": ["huay kwang", "huaikwang", "huai khwang", "ratchada", "sutthisan", "thailand cultural centre", "rama 9", "phra ram 9"],
+  "Thung Khru": ["thung khru", "thungkru", "bang mot", "bangmod", "kmutt", "pracha uthit"],
+  "Rat Burana": ["rat burana", "radburana", "ratburana", "suksawat"],
+  "Bang Khen": ["bang khen", "bangkhen", "phahonyothin", "wat phra sri", "ram inthra"],
+  "Bang Kapi": ["bang kapi", "bangkapi", "lam sali", "the mall bangkapi", "happy land"],
+  "Bang Na": ["bang na", "bangna", "udom suk", "udomsuk", "bearing", "lasalle"],
+  "Bang Phlat": ["bang phlat", "bangphlat", "charan", "yanhee", "bang o", "pinklao"],
+  "Bang Rak": ["bang rak", "bangrak", "silom", "chong nonsi", "sala daeng", "surawong"],
+  "Bang Sue": ["bang sue", "bangsue", "tao poon", "taopoon", "wong sawang", "bang son"],
+  "Bangkok Noi": ["bangkok noi", "bangkoknoi", "siriraj", "wang lang", "prannok", "fai chai"],
+  "Bangkok Yai": ["bangkok yai", "bangkokyai", "tha phra", "thaphra", "itsaraphap"],
+  "Chatuchak": ["chatuchak", "jatujak", "mo chit", "mochit", "ladprao", "kasetsart"],
+  "Don Mueang": ["don mueang", "donmuang", "dmk", "song prapha", "songprapha"],
+  "Dusit": ["dusit", "ratchawat", "sriyan", "thewet", "samsen", "suan sunandha", "suan dusit"],
+  "Khlong San": ["khlong san", "klongsan", "iconsiam", "wongwian yai", "charoen nakhon"],
+  "Khlong Toei": ["khlong toei", "klongtoey", "phrom phong", "thong lo", "thonglor", "ekkamai", "asoke", "queen sirikit"],
+  "Lat Krabang": ["lat krabang", "ladkrabang", "kmitl", "chalong krung", "suvarnabhumi"],
+  "Lat Phrao": ["lat phrao", "ladprao", "chok chai 4", "chokchai 4", "nak niwat", "wang hin"],
+  "Phasi Charoen": ["phasi charoen", "phasicharoen", "seacon bangkae", "bang wa", "bangwa", "phetkasem 48"],
+  "Phaya Thai": ["phaya thai", "phayathai", "ari", "saphan khwai", "saphankhwai", "sanam pao"],
+  "Phra Khanong": ["phra khanong", "phrakhanong", "bang chak", "punnawithi", "on nut", "onnut"],
+  "Phra Nakhon": ["phra nakhon", "phranakhon", "khao san", "khaosan", "sanam luang", "sam yot"],
+  "Pom Prap Sattru Phai": ["pom prap", "pomprap", "bobae", "chinatown", "klong thom", "worachak"],
+  "Ratchathewi": ["ratchathewi", "victory monument", "pratunam", "makkasan"],
+  "Sai Mai": ["sai mai", "saimai", "saphan mai", "saphanmai", "sai yud", "kor por aor"],
+  "Watthana": ["watthana", "wattana", "asok", "midtown asoke"]
+};
+
+// String similarity (Levenshtein distance) for typo detection
+function getSimilarity(s1, s2) {
+  const longer = s1.length < s2.length ? s2 : s1;
+  const shorter = s1.length < s2.length ? s1 : s2;
+  const longerLength = longer.length;
+  if (longerLength === 0) return 1.0;
+  
+  const costs = [];
+  for (let i = 0; i <= longer.length; i++) {
+    let lastValue = i;
+    for (let j = 0; j <= shorter.length; j++) {
+      if (i === 0) costs[j] = j;
+      else if (j > 0) {
+        let newValue = costs[j - 1];
+        if (longer.charAt(i - 1) !== shorter.charAt(j - 1)) {
+          newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+        }
+        costs[j - 1] = lastValue;
+        lastValue = newValue;
+      }
+    }
+    if (i > 0) costs[shorter.length] = lastValue;
+  }
+  return (longerLength - costs[shorter.length]) / parseFloat(longerLength);
+}
+
+// Intent Extraction Engine
+function parseUserIntent(query) {
+  const q = query.toLowerCase();
+
+  // 1. Detect District (Exact, Alias, or Fuzzy)
+  let detectedDistrict = null;
+  for (const [official, aliases] of Object.entries(DISTRICT_ALIASES)) {
+    if (q.includes(official.toLowerCase())) {
+      detectedDistrict = official;
+      break;
+    }
+    const matchedAlias = aliases.find(alias => q.includes(alias));
+    if (matchedAlias) {
+      detectedDistrict = official;
+      break;
+    }
+  }
+
+  // If still not found, check word-by-word fuzzy similarity for misspellings like "Pathu Wan"
+  if (!detectedDistrict) {
+    const words = q.split(/\s+/);
+    for (const [official, aliases] of Object.entries(DISTRICT_ALIASES)) {
+      const candidates = [official, ...aliases];
+      for (const candidate of candidates) {
+        // Compare against single words or two-word sliding window
+        for (let i = 0; i < words.length; i++) {
+          const single = words[i];
+          const double = words.slice(i, i + 2).join(' ');
+          if (getSimilarity(single, candidate) > 0.8 || getSimilarity(double, candidate) > 0.8) {
+            detectedDistrict = official;
+            break;
+          }
+        }
+        if (detectedDistrict) break;
+      }
+      if (detectedDistrict) break;
+    }
+  }
+
+  // 2. Detect Transit Lines
+  let transitLine = null;
+  if (q.includes('bts') || q.includes('skytrain')) transitLine = 'BTS';
+  else if (q.includes('mrt') || q.includes('subway') || q.includes('underground')) transitLine = 'MRT';
+  else if (q.includes('yellow line')) transitLine = 'Yellow Line';
+  else if (q.includes('pink line')) transitLine = 'Pink Line';
+  else if (q.includes('red line') || q.includes('srt')) transitLine = 'Red Line';
+  else if (q.includes('arl') || q.includes('airport rail link')) transitLine = 'Airport Rail Link';
+
+  // 3. Detect Budget / Price constraints
+  let maxPrice = null;
+  const priceKMatch = q.match(/(?:under|below|<|less than|max)\s*(\d+)\s*k/);
+  const priceNumMatch = q.match(/(?:under|below|<|less than|budget of|max)\s*(\d{4,5})/);
+  if (priceKMatch) {
+    maxPrice = parseInt(priceKMatch[1], 10) * 1000;
+  } else if (priceNumMatch) {
+    maxPrice = parseInt(priceNumMatch[1], 10);
+  } else if (q.includes('cheap') || q.includes('budget') || q.includes('low cost')) {
+    maxPrice = 6000;
+  }
+
+  // 4. Property Type
+  let propertyType = null;
+  if (q.includes('condo') || q.includes('condominium')) propertyType = 'Condominium';
+  else if (q.includes('dorm') || q.includes('apartment') || q.includes('room')) propertyType = 'Apartment';
+
+  return { detectedDistrict, transitLine, maxPrice, propertyType };
+}
 
 export default function RentalChatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,81 +138,17 @@ export default function RentalChatbot() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      text: "Sawadee krub! I'm your **SafeRoom Accommodation Assistant** for Bangkok. Tell me your preferred district (e.g. Bang Mot, Bang Khen, Dusit, Huai Khwang), budget, or proximity to BTS/MRT, and I'll find matching verified rooms with direct Google Maps links!",
+      text: "Sawadee krub! I'm your **SafeRoom Accommodation Assistant** for Bangkok.\n\nTell me your preferred **district** (even if misspelled!), **budget** (e.g., *'under 8,000 THB'*), or **transit line** (BTS/MRT), and I'll find matching verified rooms with direct Google Maps links!",
       recommendations: []
     }
   ]);
-  const [isTyping, setIsTyping] = useState(false);
   const [suggestedChips, setSuggestedChips] = useState([
-    "Recommend condos under 12k in Huai Khwang",
+    "Condos under 12k in Huai Khwang",
     "What is the standard deposit for a condo?",
-    "Find student dorms near Dusit"
+    "Budget rooms under 6k in Pathum Wan"
   ]);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
-
-  // Heuristic engine to dynamically generate follow-up question chips based on conversation context
-  const updateSuggestedChips = (query, recommendations = []) => {
-    const q = query.toLowerCase();
-
-    // Check known districts in query or recommendations
-    const knownDistricts = [
-      "Huai Khwang", "Dusit", "Don Mueang", "Chatuchak", "Lat Krabang",
-      "Lat Phrao", "Min Buri", "Khlong San", "Khlong Toei", "Phasi Charoen",
-      "Phra Nakhon", "Bang Khen", "Bang Na", "Bang Sue", "Sai Mai", "Thung Khru",
-      "Bang Bon", "Bang Kapi", "Bang Kho Laem", "Bang Khun Thian", "Bang Phlat",
-      "Bang Rak", "Bangkok Noi", "Bangkok Yai", "Bueng Kum", "Chom Thong",
-      "Din Daeng", "Khan Na Yao", "Khlong Sam Wa", "Lak Si", "Nong Chok",
-      "Nong Khaem", "Pathum Wan", "Phaya Thai", "Phra Khanong", "Pom Prap Sattru Phai",
-      "Prawet", "Rat Burana", "Ratchathewi", "Saphan Sung"
-    ];
-
-    let detectedDistrict = knownDistricts.find(d => q.includes(d.toLowerCase()));
-    if (!detectedDistrict && recommendations.length > 0 && recommendations[0].district) {
-      detectedDistrict = recommendations[0].district;
-    }
-
-    let newChips = [];
-
-    if (detectedDistrict) {
-      newChips = [
-        `Condos with direct MEA meter in ${detectedDistrict}`,
-        `Budget dorms under 6k in ${detectedDistrict}`,
-        `Proximity to BTS/MRT in ${detectedDistrict}`
-      ];
-    } else if (q.includes('deposit') || q.includes('advance') || q.includes('lease') || q.includes('contract') || q.includes('cost') || q.includes('rule')) {
-      newChips = [
-        "What is direct MEA government electricity rate?",
-        "Can a landlord legally demand 3 months deposit?",
-        "Show rooms with standard 1+1 deposit"
-      ];
-    } else if (q.includes('student') || q.includes('dorm') || q.includes('cheap') || q.includes('budget') || q.includes('university') || q.includes('campus')) {
-      newChips = [
-        "Dorms near KMUTT Bang Mot under 5k",
-        "Student apartments near Kasetsart / Saphan Mai",
-        "Affordable rooms near Lat Krabang KMITL"
-      ];
-    } else if (q.includes('bts') || q.includes('mrt') || q.includes('transit') || q.includes('station') || q.includes('train')) {
-      newChips = [
-        "Condos within 500m of BTS Sukhumvit",
-        "MRT Blue Line rooms under 10k",
-        "Rooms near SRT Don Mueang Red Line"
-      ];
-    } else if (q.includes('condo')) {
-      newChips = [
-        "Condos with direct MEA electricity (~4.5 THB)",
-        "Pet-friendly condos under 15k in Bangkok",
-        "What is the standard (2+1) condo move-in cost?"
-      ];
-    } else {
-      newChips = [
-        "Recommend condos under 12k in Huai Khwang",
-        "What is the standard deposit for an apartment?",
-        "Find verified dorms near Dusit universities"
-      ];
-    }
-
-    setSuggestedChips(newChips);
-  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -102,78 +163,116 @@ export default function RentalChatbot() {
     setTempKey('');
   };
 
-  // Local fallback engine if API key is absent or quota is limited
-  const localSmartFallback = (query) => {
-    const q = query.toLowerCase();
-    const matched = listingsData.filter(item =>
-      item.district.toLowerCase().includes(q) ||
-      item.name.toLowerCase().includes(q) ||
-      (item.transit && item.transit.toLowerCase().includes(q)) ||
-      (q.includes('condo') && item.type === 'Condominium') ||
-      (q.includes('dorm') && item.type.includes('Apartment'))
-    ).slice(0, 3);
+  // Local Intent-Driven Matcher
+  const filterListingsByIntent = (intent) => {
+    return listingsData.filter(item => {
+      if (intent.detectedDistrict && item.district.toLowerCase() !== intent.detectedDistrict.toLowerCase()) {
+        return false;
+      }
+      if (intent.maxPrice && item.rent > intent.maxPrice) {
+        return false;
+      }
+      if (intent.propertyType === 'Condominium' && item.type !== 'Condominium') {
+        return false;
+      }
+      if (intent.propertyType === 'Apartment' && item.type === 'Condominium') {
+        return false;
+      }
+      if (intent.transitLine && (!item.transit || !item.transit.toLowerCase().includes(intent.transitLine.toLowerCase()))) {
+        return false;
+      }
+      return true;
+    }).slice(0, 3);
+  };
+
+  const updateDynamicChips = (intent) => {
+    if (intent.detectedDistrict) {
+      setSuggestedChips([
+        `Budget dorms under 6k in ${intent.detectedDistrict}`,
+        `Is electricity direct MEA in ${intent.detectedDistrict}?`,
+        `Condos near BTS/MRT in ${intent.detectedDistrict}`
+      ]);
+    } else if (intent.transitLine) {
+      setSuggestedChips([
+        `Rooms under 8k along ${intent.transitLine}`,
+        `Best student areas on the ${intent.transitLine}`,
+        `How much is advance rent for condos?`
+      ]);
+    } else {
+      setSuggestedChips([
+        "Condos under 10k in Bang Na",
+        "Explain MEA meter vs private sub-meter",
+        "Student dorms near KMUTT"
+      ]);
+    }
+  };
+
+  const localSmartFallback = (query, intent) => {
+    const matched = filterListingsByIntent(intent);
 
     let text = "";
-    if (q.includes('deposit') || q.includes('advance') || q.includes('lease') || q.includes('cost')) {
-      text = "📋 **Bangkok Rental Standard Guide:**\n\n• **Condominiums:** Standard terms require **(2+1) Months** (2 months deposit + 1 month advance). Electricity is billed via direct MEA government meter (~4.5 THB/unit).\n• **Apartments & Dorms:** Standard terms require **(1+1) Months** (1 month deposit + 1 month advance). Electricity is sub-metered at 7.0–8.0 THB/unit.\n\nNever pay more than 1 month advance rent upfront!";
+    if (intent.detectedDistrict) {
+      text = `📍 Recognized area: **${intent.detectedDistrict}**${intent.maxPrice ? ` with budget **≤ ${intent.maxPrice.toLocaleString()} THB**` : ''}.\nHere are matching verified accommodations from our Bangkok database:`;
     } else if (matched.length > 0) {
-      text = `Here are verified recommendations from our Bangkok database matching your search:`;
+      text = `Here are verified recommendations matching your criteria:`;
+    } else if (query.toLowerCase().includes('deposit') || query.toLowerCase().includes('advance') || query.toLowerCase().includes('lease')) {
+      text = "📋 **Bangkok Rental Deposit Standards:**\n\n• **Condominiums:** Standard terms require **(2+1) Months** (2 months deposit + 1 month advance rent). Electricity is billed via direct MEA government meter (~4.5 THB/unit).\n• **Apartments/Dorms:** Standard terms require **(1+1) Months** (1 month deposit + 1 month advance rent). Electricity is sub-metered at 7.0–8.0 THB/unit.\n\nAvoid landlords asking for 3+ months upfront!";
     } else {
-      text = "I'm ready to help you find verified Bangkok accommodations! Try asking:\n• *'Recommend a condo under 12k in Huai Khwang'* \n• *'Find a budget student room near Bang Mot'* \n• *'What is the deposit for an apartment?'*";
+      text = "I'm ready to help you find verified Bangkok accommodations! Try naming a district (*'Pathu Wan'*, *'Huai Khwang'*, *'Don Mueang'*), budget (*'under 8,000 THB'*), or transit line (*'near BTS'*).";
     }
 
     return { text, recommendations: matched };
   };
 
-  const callGeminiAPI = async (userPrompt) => {
-    // Provide a sample of our listings database to ground the model
-    const sampleCatalog = listingsData.slice(0, 25).map(l => ({
+  const callGeminiAPI = async (userPrompt, intent) => {
+    const matchedListings = filterListingsByIntent(intent);
+    const catalogSubset = (matchedListings.length > 0 ? matchedListings : listingsData.slice(0, 30)).map(l => ({
       name: l.name,
       district: l.district,
       type: l.type,
       rent: `${l.rent} THB/mo`,
       transit: l.transit,
-      electricity: l.electricityBilling,
+      electric: l.electricityBilling,
       maps: l.googleMapsUrl
     }));
 
     const systemPrompt = `
-You are the SafeRoom Accommodation AI Assistant for Bangkok, Thailand.
-Help tenants find rooms, understand Bangkok lease rules, and avoid rental scams.
-Core Bangkok tenancy rules:
-1. Condominiums: Standard (2+1) months [2 months deposit + 1 month advance]. Direct MEA Government electricity (~4.5 THB/unit).
-2. Apartments/Dorms: Standard (1+1) months [1 month deposit + 1 month advance]. Sub-meter electricity typically 7-8 THB/unit. Over 8.5 THB/unit is high.
-3. Relevant listings available in our verified Bangkok dataset:
-${JSON.stringify(sampleCatalog, null, 1)}
+You are the SafeRoom Accommodation AI Concierge for Bangkok, Thailand.
+Help tenants find rooms, understand Bangkok lease rules, and avoid rental traps.
 
-Instructions:
-- When the user asks for places, recommend 1-2 realistic options from the data with their exact district, monthly rent, and direct Google Maps link in Markdown: [View on Google Maps](URL).
-- Be polite, authentic, and concise with bullet points.
+CRITICAL INSTRUCTION - FUZZY DISTRICT & INTENT PARSING:
+- Users frequently misspell Thai district names (e.g. "Pathu Wan" -> Pathum Wan, "Huay Kwang" -> Huai Khwang, "Ladprao" -> Lat Phrao, "Bangmod" -> Thung Khru, "Silom" -> Bang Rak).
+- Always recognize the intended district, transit line (BTS/MRT), and budget (e.g. "under 10k").
+- User Detected Intent: District="${intent.detectedDistrict || 'None'}", Transit="${intent.transitLine || 'None'}", MaxBudget="${intent.maxPrice || 'None'}".
+
+Bangkok Rental Rules:
+1. Condos: Standard (2+1) months [2 months deposit + 1 month advance]. Direct MEA meters (~4.5 THB/unit).
+2. Apartments/Dorms: Standard (1+1) months [1 month deposit + 1 month advance]. Sub-meters 7-8 THB/unit.
+
+Verified Listings Catalog for this context:
+${JSON.stringify(catalogSubset, null, 1)}
+
+Output requirements:
+- If matching properties exist, recommend 1 to 2 options with their name, district, rent, and explicit Markdown Google Maps link: [View on Google Maps](URL).
+- Be polite, concise, and helpful with bullet points.
 `;
 
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
-    const payload = {
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: `${systemPrompt}\n\nUser Question: ${userPrompt}` }]
-        }
-      ]
-    };
-
     const res = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nUser Question: ${userPrompt}` }] }]
+      })
     });
 
-    if (!res.ok) {
-      throw new Error(`Gemini API Error: ${res.statusText}`);
-    }
-
+    if (!res.ok) throw new Error(`Gemini API Error: ${res.statusText}`);
     const json = await res.json();
-    return json.candidates?.[0]?.content?.parts?.[0]?.text;
+    return {
+      text: json.candidates?.[0]?.content?.parts?.[0]?.text,
+      recommendations: matchedListings
+    };
   };
 
   const handleSend = async (manualText) => {
@@ -185,15 +284,24 @@ Instructions:
     setInput('');
     setIsTyping(true);
 
+    // 1. Parse user intent (District, Transit, Budget)
+    const intent = parseUserIntent(textToSend);
+    updateDynamicChips(intent);
+
     try {
       if (apiKey) {
-        const botReply = await callGeminiAPI(textToSend);
-        setMessages(prev => [...prev, { role: 'assistant', text: botReply, recommendations: [] }]);
-        updateSuggestedChips(textToSend);
+        const botResult = await callGeminiAPI(textToSend, intent);
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            text: botResult.text,
+            recommendations: botResult.recommendations
+          }
+        ]);
       } else {
-        // Run local fallback when API key is not yet configured
         setTimeout(() => {
-          const fallback = localSmartFallback(textToSend);
+          const fallback = localSmartFallback(textToSend, intent);
           setMessages(prev => [
             ...prev,
             {
@@ -202,12 +310,11 @@ Instructions:
               recommendations: fallback.recommendations
             }
           ]);
-          updateSuggestedChips(textToSend, fallback.recommendations);
         }, 400);
       }
     } catch (err) {
-      console.warn("Gemini API call failed, switching to local assistant:", err);
-      const fallback = localSmartFallback(textToSend);
+      console.warn("Gemini call failed, switching to local intent fallback:", err);
+      const fallback = localSmartFallback(textToSend, intent);
       setMessages(prev => [
         ...prev,
         {
@@ -216,7 +323,6 @@ Instructions:
           recommendations: fallback.recommendations
         }
       ]);
-      updateSuggestedChips(textToSend, fallback.recommendations);
     } finally {
       setIsTyping(false);
     }
@@ -274,7 +380,7 @@ Instructions:
             </div>
           </div>
 
-          {/* Quick API Key Toggle Modal */}
+          {/* Quick API Key Modal */}
           {showKeyModal && (
             <form onSubmit={handleSaveKey} className="p-3 bg-emerald-50 dark:bg-slate-800 border-b border-emerald-100 dark:border-slate-700 flex gap-2">
               <input
@@ -329,6 +435,11 @@ Instructions:
                             <span className="text-emerald-600 dark:text-emerald-400 font-extrabold">{place.rent.toLocaleString()}฿</span>
                           </div>
                           <p className="text-[10px] text-slate-500 line-clamp-1">📍 {place.address}</p>
+                          {place.transit && (
+                            <p className="text-[10px] text-slate-400 flex items-center gap-1 line-clamp-1">
+                              <Train className="w-3 h-3 text-emerald-500"/> {place.transit}
+                            </p>
+                          )}
                           <a
                             href={place.googleMapsUrl}
                             target="_blank"
@@ -354,19 +465,19 @@ Instructions:
             {isTyping && (
               <div className="flex items-center gap-2 text-slate-400 text-xs italic">
                 <Bot className="w-3.5 h-3.5 text-emerald-500 animate-spin"/>
-                <span>Searching Bangkok listings...</span>
+                <span>Searching verified Bangkok listings...</span>
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Prompt Chips (Dynamic Contextual) */}
+          {/* Dynamic Follow-up Chips */}
           <div className="px-3 py-2 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex gap-1.5 overflow-x-auto no-scrollbar shrink-0">
             {suggestedChips.map((chip, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSend(chip)}
-                className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950 dark:hover:text-emerald-300 whitespace-nowrap transition-colors"
+                className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/60 dark:hover:text-emerald-300 whitespace-nowrap transition-colors border border-transparent hover:border-emerald-200 dark:hover:border-emerald-800"
               >
                 {chip}
               </button>
@@ -382,7 +493,7 @@ Instructions:
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about rooms, areas, or rental safety..."
+              placeholder="e.g., 'Pathu Wan under 15k', 'condos near BTS Bang Wa'..."
               className="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border-none rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"
             />
             <button
