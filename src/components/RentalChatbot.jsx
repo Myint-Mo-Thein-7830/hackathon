@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Bot, User, Send, X, Sparkles, MapPin, ExternalLink, Key, Check, Train, DollarSign } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Bot, User, Send, X, Sparkles, MapPin, ExternalLink, Key, Check, Train, ArrowRight } from 'lucide-react';
 import listingsData from '../data/mockListings.json';
 
-// Official 50 Districts + Aliases + Typo Tolerance
+// Official 50 Districts + Common Aliases & Misspellings
 const DISTRICT_ALIASES = {
   "Pathum Wan": ["pathu wan", "pathumwan", "patumwan", "siam", "chula", "samyan", "national stadium", "mbk", "ploenchit"],
   "Huai Khwang": ["huay kwang", "huaikwang", "huai khwang", "ratchada", "sutthisan", "thailand cultural centre", "rama 9", "phra ram 9"],
@@ -18,7 +18,7 @@ const DISTRICT_ALIASES = {
   "Bangkok Yai": ["bangkok yai", "bangkokyai", "tha phra", "thaphra", "itsaraphap"],
   "Chatuchak": ["chatuchak", "jatujak", "mo chit", "mochit", "ladprao", "kasetsart"],
   "Don Mueang": ["don mueang", "donmuang", "dmk", "song prapha", "songprapha"],
-  "Dusit": ["dusit", "ratchawat", "sriyan", "thewet", "samsen", "suan sunandha", "suan dusit"],
+  "Dusit": ["dusit", "ratchawat", "sriyan", "thewet", "samsen", "suan sunandha", "suan dusit", "vajira"],
   "Khlong San": ["khlong san", "klongsan", "iconsiam", "wongwian yai", "charoen nakhon"],
   "Khlong Toei": ["khlong toei", "klongtoey", "phrom phong", "thong lo", "thonglor", "ekkamai", "asoke", "queen sirikit"],
   "Lat Krabang": ["lat krabang", "ladkrabang", "kmitl", "chalong krung", "suvarnabhumi"],
@@ -33,7 +33,17 @@ const DISTRICT_ALIASES = {
   "Watthana": ["watthana", "wattana", "asok", "midtown asoke"]
 };
 
-// String similarity (Levenshtein distance) for typo detection
+// Strips out all asterisks and bullet symbols so display stays completely clean
+function cleanText(text) {
+  if (!text) return "";
+  return text
+    .replace(/\*\*/g, '')
+    .replace(/\*/g, '')
+    .replace(/^[\s]*-\s+/gm, '• ')
+    .trim();
+}
+
+// Levenshtein similarity for handling misspellings like "Pathu Wan" -> "Pathum Wan"
 function getSimilarity(s1, s2) {
   const longer = s1.length < s2.length ? s2 : s1;
   const shorter = s1.length < s2.length ? s1 : s2;
@@ -59,11 +69,9 @@ function getSimilarity(s1, s2) {
   return (longerLength - costs[shorter.length]) / parseFloat(longerLength);
 }
 
-// Intent Extraction Engine
 function parseUserIntent(query) {
   const q = query.toLowerCase();
 
-  // 1. Detect District (Exact, Alias, or Fuzzy)
   let detectedDistrict = null;
   for (const [official, aliases] of Object.entries(DISTRICT_ALIASES)) {
     if (q.includes(official.toLowerCase())) {
@@ -77,17 +85,16 @@ function parseUserIntent(query) {
     }
   }
 
-  // If still not found, check word-by-word fuzzy similarity for misspellings like "Pathu Wan"
+  // Fuzzy match fallback for typos
   if (!detectedDistrict) {
     const words = q.split(/\s+/);
     for (const [official, aliases] of Object.entries(DISTRICT_ALIASES)) {
       const candidates = [official, ...aliases];
       for (const candidate of candidates) {
-        // Compare against single words or two-word sliding window
         for (let i = 0; i < words.length; i++) {
           const single = words[i];
           const double = words.slice(i, i + 2).join(' ');
-          if (getSimilarity(single, candidate) > 0.8 || getSimilarity(double, candidate) > 0.8) {
+          if (getSimilarity(single, candidate) > 0.78 || getSimilarity(double, candidate) > 0.78) {
             detectedDistrict = official;
             break;
           }
@@ -98,16 +105,14 @@ function parseUserIntent(query) {
     }
   }
 
-  // 2. Detect Transit Lines
   let transitLine = null;
   if (q.includes('bts') || q.includes('skytrain')) transitLine = 'BTS';
-  else if (q.includes('mrt') || q.includes('subway') || q.includes('underground')) transitLine = 'MRT';
+  else if (q.includes('mrt') || q.includes('subway')) transitLine = 'MRT';
   else if (q.includes('yellow line')) transitLine = 'Yellow Line';
   else if (q.includes('pink line')) transitLine = 'Pink Line';
   else if (q.includes('red line') || q.includes('srt')) transitLine = 'Red Line';
-  else if (q.includes('arl') || q.includes('airport rail link')) transitLine = 'Airport Rail Link';
+  else if (q.includes('arl') || q.includes('airport link')) transitLine = 'Airport Rail Link';
 
-  // 3. Detect Budget / Price constraints
   let maxPrice = null;
   const priceKMatch = q.match(/(?:under|below|<|less than|max)\s*(\d+)\s*k/);
   const priceNumMatch = q.match(/(?:under|below|<|less than|budget of|max)\s*(\d{4,5})/);
@@ -119,7 +124,6 @@ function parseUserIntent(query) {
     maxPrice = 6000;
   }
 
-  // 4. Property Type
   let propertyType = null;
   if (q.includes('condo') || q.includes('condominium')) propertyType = 'Condominium';
   else if (q.includes('dorm') || q.includes('apartment') || q.includes('room')) propertyType = 'Apartment';
@@ -138,15 +142,17 @@ export default function RentalChatbot() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      text: "Sawadee krub! I'm your **SafeRoom Accommodation Assistant** for Bangkok.\n\nTell me your preferred **district** (even if misspelled!), **budget** (e.g., *'under 8,000 THB'*), or **transit line** (BTS/MRT), and I'll find matching verified rooms with direct Google Maps links!",
+      text: "Sawadee krub! I'm your SafeRoom Assistant.\n\nLooking for an accommodation in Bangkok? You can tell me a district (even if you misspell it), your budget (like 'under 7,000 THB'), or your preferred transit station.",
       recommendations: []
     }
   ]);
+
   const [suggestedChips, setSuggestedChips] = useState([
     "Condos under 12k in Huai Khwang",
     "What is the standard deposit for a condo?",
     "Budget rooms under 6k in Pathum Wan"
   ]);
+
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
@@ -163,7 +169,6 @@ export default function RentalChatbot() {
     setTempKey('');
   };
 
-  // Local Intent-Driven Matcher
   const filterListingsByIntent = (intent) => {
     return listingsData.filter(item => {
       if (intent.detectedDistrict && item.district.toLowerCase() !== intent.detectedDistrict.toLowerCase()) {
@@ -185,48 +190,63 @@ export default function RentalChatbot() {
     }).slice(0, 3);
   };
 
-  const updateDynamicChips = (intent) => {
+  const updateDynamicChips = (intent, query = "") => {
+    const q = query.toLowerCase();
+
     if (intent.detectedDistrict) {
       setSuggestedChips([
         `Budget dorms under 6k in ${intent.detectedDistrict}`,
-        `Is electricity direct MEA in ${intent.detectedDistrict}?`,
-        `Condos near BTS/MRT in ${intent.detectedDistrict}`
+        `Direct MEA condos in ${intent.detectedDistrict}`,
+        `What is the usual deposit in ${intent.detectedDistrict}?`
+      ]);
+    } else if (q.includes('deposit') || q.includes('advance') || q.includes('lease')) {
+      setSuggestedChips([
+        "Can a landlord deduct cleaning fees?",
+        "What notice period is normal to move out?",
+        "Find apartments with only 1 month deposit"
+      ]);
+    } else if (q.includes('electric') || q.includes('bill') || q.includes('meter')) {
+      setSuggestedChips([
+        "Is 8 THB per unit electric normal for a dorm?",
+        "How much is electricity in a condo?",
+        "What is MEA government rate?"
       ]);
     } else if (intent.transitLine) {
       setSuggestedChips([
-        `Rooms under 8k along ${intent.transitLine}`,
-        `Best student areas on the ${intent.transitLine}`,
-        `How much is advance rent for condos?`
+        `Rooms under 8k near ${intent.transitLine}`,
+        `Condos with free shuttle to ${intent.transitLine}`,
+        `Compare condo vs dorm move-in cost`
       ]);
     } else {
       setSuggestedChips([
-        "Condos under 10k in Bang Na",
-        "Explain MEA meter vs private sub-meter",
-        "Student dorms near KMUTT"
+        "Rooms near Chula under 10k",
+        "Student dorms near KMUTT Bang Mot",
+        "Rooms near BTS Ari"
       ]);
     }
   };
 
   const localSmartFallback = (query, intent) => {
     const matched = filterListingsByIntent(intent);
-
     let text = "";
+
     if (intent.detectedDistrict) {
-      text = `📍 Recognized area: **${intent.detectedDistrict}**${intent.maxPrice ? ` with budget **≤ ${intent.maxPrice.toLocaleString()} THB**` : ''}.\nHere are matching verified accommodations from our Bangkok database:`;
+      const budgetNote = intent.maxPrice ? ` under ${intent.maxPrice.toLocaleString()} THB` : '';
+      text = `Got it! Looking at ${intent.detectedDistrict}${budgetNote}.\n\nHere are verified places from our database. Would you prefer a modern condo with direct MEA electricity or a budget-friendly apartment?`;
     } else if (matched.length > 0) {
-      text = `Here are verified recommendations matching your criteria:`;
+      text = `Here are verified recommendations matching your request. Click any card to view its exact location on Google Maps:`;
     } else if (query.toLowerCase().includes('deposit') || query.toLowerCase().includes('advance') || query.toLowerCase().includes('lease')) {
-      text = "📋 **Bangkok Rental Deposit Standards:**\n\n• **Condominiums:** Standard terms require **(2+1) Months** (2 months deposit + 1 month advance rent). Electricity is billed via direct MEA government meter (~4.5 THB/unit).\n• **Apartments/Dorms:** Standard terms require **(1+1) Months** (1 month deposit + 1 month advance rent). Electricity is sub-metered at 7.0–8.0 THB/unit.\n\nAvoid landlords asking for 3+ months upfront!";
+      text = "In Bangkok, rental deposits follow two clear standards:\n\n• Condominiums: Usually 2 months security deposit + 1 month advance rent (2+1). You get direct MEA government electric (~4.5 THB/unit).\n• Dorms & Apartments: Usually 1 month security deposit + 1 month advance rent (1+1). Electric is billed by sub-meter at 7 to 8 THB/unit.\n\nNever pay more than 1 month advance rent before moving in!";
     } else {
-      text = "I'm ready to help you find verified Bangkok accommodations! Try naming a district (*'Pathu Wan'*, *'Huai Khwang'*, *'Don Mueang'*), budget (*'under 8,000 THB'*), or transit line (*'near BTS'*).";
+      text = "I'm ready to help! You can give me any Bangkok neighborhood (like Huai Khwang, Dusit, or Bang Na), transit line, or budget (like 'under 8,000 THB').";
     }
 
-    return { text, recommendations: matched };
+    return { text: cleanText(text), recommendations: matched };
   };
 
   const callGeminiAPI = async (userPrompt, intent) => {
     const matchedListings = filterListingsByIntent(intent);
-    const catalogSubset = (matchedListings.length > 0 ? matchedListings : listingsData.slice(0, 30)).map(l => ({
+    const catalogSubset = (matchedListings.length > 0 ? matchedListings : listingsData.slice(0, 25)).map(l => ({
       name: l.name,
       district: l.district,
       type: l.type,
@@ -237,24 +257,23 @@ export default function RentalChatbot() {
     }));
 
     const systemPrompt = `
-You are the SafeRoom Accommodation AI Concierge for Bangkok, Thailand.
-Help tenants find rooms, understand Bangkok lease rules, and avoid rental traps.
+You are the SafeRoom Assistant for Bangkok accommodation rentals.
+Be friendly, direct, authentic, and interactive. 
 
-CRITICAL INSTRUCTION - FUZZY DISTRICT & INTENT PARSING:
-- Users frequently misspell Thai district names (e.g. "Pathu Wan" -> Pathum Wan, "Huay Kwang" -> Huai Khwang, "Ladprao" -> Lat Phrao, "Bangmod" -> Thung Khru, "Silom" -> Bang Rak).
-- Always recognize the intended district, transit line (BTS/MRT), and budget (e.g. "under 10k").
-- User Detected Intent: District="${intent.detectedDistrict || 'None'}", Transit="${intent.transitLine || 'None'}", MaxBudget="${intent.maxPrice || 'None'}".
+IMPORTANT FORMATTING RULES:
+- DO NOT use asterisks (*) or (**) anywhere in your response. No bold asterisks, no italic asterisks.
+- Keep sentences clean and natural. Use standard bullet points (•) if listing items.
+- If the user misspells a district (e.g. "Pathu Wan" -> Pathum Wan, "Huay Kwang" -> Huai Khwang, "Ladprao" -> Lat Phrao), recognize it effortlessly without scolding them.
+- User Intent: District="${intent.detectedDistrict || 'None'}", Transit="${intent.transitLine || 'None'}", MaxBudget="${intent.maxPrice || 'None'}".
 
-Bangkok Rental Rules:
-1. Condos: Standard (2+1) months [2 months deposit + 1 month advance]. Direct MEA meters (~4.5 THB/unit).
-2. Apartments/Dorms: Standard (1+1) months [1 month deposit + 1 month advance]. Sub-meters 7-8 THB/unit.
+Rental standards to reinforce:
+- Condos: Standard (2+1) months [2 months deposit + 1 month advance]. Direct MEA meters (~4.5 THB/unit).
+- Apartments/Dorms: Standard (1+1) months. Sub-meters 7-8 THB/unit.
 
-Verified Listings Catalog for this context:
+Verified listings in our database:
 ${JSON.stringify(catalogSubset, null, 1)}
 
-Output requirements:
-- If matching properties exist, recommend 1 to 2 options with their name, district, rent, and explicit Markdown Google Maps link: [View on Google Maps](URL).
-- Be polite, concise, and helpful with bullet points.
+Respond in 2-3 engaging, conversational sentences, provide property details, and invite them to specify room type or amenities.
 `;
 
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
@@ -269,8 +288,10 @@ Output requirements:
 
     if (!res.ok) throw new Error(`Gemini API Error: ${res.statusText}`);
     const json = await res.json();
+    const rawReply = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
     return {
-      text: json.candidates?.[0]?.content?.parts?.[0]?.text,
+      text: cleanText(rawReply),
       recommendations: matchedListings
     };
   };
@@ -284,9 +305,8 @@ Output requirements:
     setInput('');
     setIsTyping(true);
 
-    // 1. Parse user intent (District, Transit, Budget)
     const intent = parseUserIntent(textToSend);
-    updateDynamicChips(intent);
+    updateDynamicChips(intent, textToSend);
 
     try {
       if (apiKey) {
@@ -310,10 +330,10 @@ Output requirements:
               recommendations: fallback.recommendations
             }
           ]);
-        }, 400);
+        }, 350);
       }
     } catch (err) {
-      console.warn("Gemini call failed, switching to local intent fallback:", err);
+      console.warn("Switching to local assistant:", err);
       const fallback = localSmartFallback(textToSend, intent);
       setMessages(prev => [
         ...prev,
@@ -337,7 +357,7 @@ Output requirements:
           className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-xl shadow-emerald-950/20 hover:scale-105 transition-all"
         >
           <Bot className="w-5 h-5 text-white"/>
-          <span>Find Rooms (AI)</span>
+          <span>Find Rooms</span>
           <span className="w-2 h-2 rounded-full bg-emerald-300 animate-ping" />
         </button>
       )}
@@ -353,11 +373,11 @@ Output requirements:
               </div>
               <div>
                 <h4 className="font-extrabold text-sm tracking-tight flex items-center gap-1.5">
-                  SafeRoom Concierge
+                  SafeRoom Assistant
                   <Sparkles className="w-3.5 h-3.5 text-emerald-200"/>
                 </h4>
                 <p className="text-[11px] text-emerald-100 flex items-center gap-1">
-                  <span>{apiKey ? "Powered by Gemini 2.5 Flash" : "Local Verified Assistant"}</span>
+                  <span>{apiKey ? "Powered by Gemini 2.5 Flash" : "Bangkok Room Guide"}</span>
                   {apiKey && <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" />}
                 </p>
               </div>
@@ -380,7 +400,7 @@ Output requirements:
             </div>
           </div>
 
-          {/* Quick API Key Modal */}
+          {/* Quick API Key Dropdown */}
           {showKeyModal && (
             <form onSubmit={handleSaveKey} className="p-3 bg-emerald-50 dark:bg-slate-800 border-b border-emerald-100 dark:border-slate-700 flex gap-2">
               <input
@@ -416,7 +436,7 @@ Output requirements:
                     className={`p-3 rounded-2xl whitespace-pre-line leading-relaxed ${
                       m.role === 'user'
                         ? 'bg-emerald-600 text-white font-medium rounded-tr-none'
-                        : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 shadow-sm rounded-tl-none'
+                        : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 shadow-sm rounded-tl-none font-normal'
                     }`}
                   >
                     {m.text}
@@ -431,13 +451,13 @@ Output requirements:
                           className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800/60 shadow-sm space-y-1"
                         >
                           <div className="flex items-center justify-between">
-                            <span className="font-bold text-slate-900 dark:text-white line-clamp-1">{place.name}</span>
+                            <span className="font-semibold text-slate-900 dark:text-white line-clamp-1">{place.name}</span>
                             <span className="text-emerald-600 dark:text-emerald-400 font-extrabold">{place.rent.toLocaleString()}฿</span>
                           </div>
                           <p className="text-[10px] text-slate-500 line-clamp-1">📍 {place.address}</p>
                           {place.transit && (
                             <p className="text-[10px] text-slate-400 flex items-center gap-1 line-clamp-1">
-                              <Train className="w-3 h-3 text-emerald-500"/> {place.transit}
+                              <Train className="w-3 h-3 text-emerald-500 shrink-0"/> {place.transit}
                             </p>
                           )}
                           <a
@@ -465,7 +485,7 @@ Output requirements:
             {isTyping && (
               <div className="flex items-center gap-2 text-slate-400 text-xs italic">
                 <Bot className="w-3.5 h-3.5 text-emerald-500 animate-spin"/>
-                <span>Searching verified Bangkok listings...</span>
+                <span>Finding matching places...</span>
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -477,9 +497,10 @@ Output requirements:
               <button
                 key={idx}
                 onClick={() => handleSend(chip)}
-                className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/60 dark:hover:text-emerald-300 whitespace-nowrap transition-colors border border-transparent hover:border-emerald-200 dark:hover:border-emerald-800"
+                className="text-[10px] font-medium px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/60 dark:hover:text-emerald-300 whitespace-nowrap transition-colors border border-transparent hover:border-emerald-200 dark:hover:border-emerald-800 flex items-center gap-1"
               >
-                {chip}
+                <span>{chip}</span>
+                <ArrowRight className="w-2.5 h-2.5 opacity-60"/>
               </button>
             ))}
           </div>
@@ -493,7 +514,7 @@ Output requirements:
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="e.g., 'Pathu Wan under 15k', 'condos near BTS Bang Wa'..."
+              placeholder="e.g. Pathu Wan under 15k, condos near BTS Bang Wa..."
               className="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border-none rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"
             />
             <button
