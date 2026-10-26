@@ -10,7 +10,7 @@ export const BANGKOK_50_DISTRICTS = [
   "Bang Na", "Bang Phlat", "Bang Rak", "Bang Sue", "Bangkok Noi",
   "Bangkok Yai", "Bueng Kum", "Chatuchak", "Chom Thong", "Din Daeng",
   "Don Mueang", "Dusit", "Huai Khwang", "Khan Na Yao", "Khlong Sam Wa",
-  "Khlong San", "Khlong Toei", "Laksi", "Lat Krabang", "Lat Phrao",
+  "Khlong San", "Khlong Toei", "Lak Si", "Lat Krabang", "Lat Phrao",
   "Min Buri", "Nong Chok", "Nong Khaem", "Pathum Wan", "Phasi Charoen",
   "Phaya Thai", "Phra Khanong", "Phra Nakhon", "Pom Prap Sattru Phai", "Prawet",
   "Rat Burana", "Ratchathewi", "Sai Mai", "Samphanthawong", "Saphan Sung",

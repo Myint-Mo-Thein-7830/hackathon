@@ -67,11 +67,12 @@ export default function ModeA_RoomBrowser({ onSwitchToEvaluate, setActiveTab }) 
         (propertyFilter === 'Condo' && (item.type === 'Condominium' || item.propertyType === 'condo')) ||
         (propertyFilter === 'Dorm' && (item.type?.includes('Apartment') || item.propertyType === 'apartment'));
 
-      // 3. 50-District Match
+      // 3. 50-District Match (whitespace-resilient)
+      const normSelected = selectedDistrict.toLowerCase().replace(/\s+/g, '');
       const matchesDistrict =
         selectedDistrict === 'All 50 Districts' ||
-        (item.district && item.district.toLowerCase().includes(selectedDistrict.toLowerCase())) ||
-        (item.address && item.address.toLowerCase().includes(selectedDistrict.toLowerCase()));
+        (item.district && item.district.toLowerCase().replace(/\s+/g, '').includes(normSelected)) ||
+        (item.address && item.address.toLowerCase().replace(/\s+/g, '').includes(normSelected));
 
       // 4. Dual Price Match
       const price = item.rent || item.baseRent;
