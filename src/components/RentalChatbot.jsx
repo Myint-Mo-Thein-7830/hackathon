@@ -368,7 +368,8 @@ function cleanText(text) {
 }
 
 function normalize(str) {
-  return str.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (!str) return "";
+  return str.toLowerCase().replace(/[^a-z0-9\u0E00-\u0E7F]/gu, '');
 }
 
 // Levenshtein similarity distance for typo tolerance
@@ -404,22 +405,33 @@ function parseUserIntent(query) {
 
   let detectedDistrict = null;
 
+  // If the query is just a greeting, do not search for districts
+  const isPureGreeting = /^(hi|hello|hey|sawadee|sawasdee|good morning|good afternoon|good evening|greetings|help)(\s*!*)?$/i.test(query.trim());
+  if (isPureGreeting) {
+    return { detectedDistrict: null, transitLine: null, maxPrice: null };
+  }
+
   // 1. Direct and Alias match across the 50 districts
   for (const entry of BANGKOK_DISTRICTS) {
-    if (rawQ.includes(entry.name.toLowerCase()) || normQ.includes(normalize(entry.name))) {
+    const normName = normalize(entry.name);
+    if (rawQ.includes(entry.name.toLowerCase()) || (normName.length >= 4 && normQ.includes(normName))) {
       detectedDistrict = entry.name;
       break;
     }
-    const matched = entry.aliases.find(alias => rawQ.includes(alias) || (alias.length >= 4 && normQ.includes(normalize(alias))));
+    const matched = entry.aliases.find(alias => {
+      const normAlias = normalize(alias);
+      if (!normAlias || normAlias.length < 3) return false;
+      return rawQ.includes(alias.toLowerCase()) || normQ.includes(normAlias);
+    });
     if (matched) {
       detectedDistrict = entry.name;
       break;
     }
   }
 
-  // 2. Fuzzy match for misspelled inputs (e.g., "Kha Na Yo" -> "Khan Na Yao")
+  // 2. Fuzzy match for misspelled inputs (only evaluate words with at least 4 letters)
   if (!detectedDistrict) {
-    const words = rawQ.split(/\s+/);
+    const words = rawQ.split(/\s+/).filter(w => w.length >= 4);
     let bestScore = 0;
     let bestDistrict = null;
 
@@ -427,6 +439,7 @@ function parseUserIntent(query) {
       const candidates = [entry.name, ...entry.aliases];
       for (const cand of candidates) {
         const normCand = normalize(cand);
+        if (!normCand || normCand.length < 4) continue;
         for (let i = 0; i < words.length; i++) {
           const w1 = normalize(words[i]);
           const w2 = normalize(words.slice(i, i + 2).join(' '));
@@ -445,7 +458,7 @@ function parseUserIntent(query) {
       }
     }
 
-    if (bestScore >= 0.70) {
+    if (bestScore >= 0.72) {
       detectedDistrict = bestDistrict;
     }
   }
@@ -611,6 +624,16 @@ export default function RentalChatbot() {
     const matched = getAccurateRecommendations(intent);
     let text = "";
 
+    const q = query.toLowerCase().trim();
+    const isGreeting = /^(hi|hello|hey|sawadee|sawasdee|good morning|good afternoon|good evening|greetings|help)(\s.*)?$/i.test(q);
+
+    if (isGreeting) {
+      return {
+        text: "Sawadee krub! Welcome to Bangkok. I am your Rental Assistant.\n\nHow can I help you today? Feel free to ask me:\n• To find verified accommodations in any district (e.g., Khan Na Yao, Huai Khwang, or Sathon)\n• Recommendations under a specific budget (e.g., condos under 12k THB)\n• Legal rental rules (fair deposits, advance rent, MEA vs private electricity)",
+        recommendations: []
+      };
+    }
+
     if (intent.detectedDistrict) {
       const budgetNote = intent.maxPrice ? ` within ${intent.maxPrice.toLocaleString()} THB/month` : '';
       if (matched.length > 0) {
@@ -624,7 +647,8 @@ export default function RentalChatbot() {
       text = "I can help you find rooms anywhere in Bangkok. Please tell me your preferred district (such as Khan Na Yao, Huai Khwang, or Dusit), your budget, or your transit line.";
     }
 
-    return { text: cleanText(text), recommendations: matched };
+    const shouldShowCards = Boolean(intent.detectedDistrict || intent.transitLine || intent.maxPrice);
+    return { text: cleanText(text), recommendations: shouldShowCards ? matched : [] };
   };
 
   const callGeminiAPI = async (userPrompt, intent) => {
@@ -654,17 +678,18 @@ export default function RentalChatbot() {
     }));
 
     const systemPrompt = `
-You are Rental Assistant for Bangkok accommodation rentals.
-Be friendly, natural, and helpful.
+You are Rental Assistant, an intelligent and friendly Bangkok living and accommodation rental guide.
+Be conversational, helpful, and natural.
 
-STRICT DISTRICT LOCK:
-- The user is asking about: District="${intent.detectedDistrict || 'Unspecified'}", MaxBudget="${intent.maxPrice || 'Unspecified'}".
-- If a district is identified, YOU MUST ONLY discuss that exact district. Under no circumstances should you mention or recommend properties in Thung Khru, Bang Mot, or any other area unless explicitly asked.
-- ZERO ASTERISKS: DO NOT use asterisks (*) or (**) anywhere in your response. No markdown asterisks for bold or italic. Use standard bullet points (•) if needed.
-- Provide clear details on rent, move-in cash, and electricity billing.
+STRICT ACCURACY RULES:
+1. GREETINGS: If the user is just saying hello or greeting you (e.g., "Hi", "Hello", "Sawadee"), greet them warmly and ask how you can help with their rental search or lease review. DO NOT list or recommend properties unless they ask for places.
+2. STRICT DISTRICT LOCK: The user is asking about: District="${intent.detectedDistrict || 'Unspecified'}", MaxBudget="${intent.maxPrice || 'Unspecified'}".
+3. If a district is identified, YOU MUST ONLY discuss that exact district. Under no circumstances should you mention or recommend properties in Thung Khru, Bang Mot, or any other area unless explicitly asked.
+4. ZERO ASTERISKS: DO NOT use asterisks (*) or (**) anywhere in your response. No markdown asterisks for bold or italic. Use standard bullet points (•) if needed.
+5. Provide clear, honest details on rent, move-in cash, and electricity billing.
 `;
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
 
     const res = await fetch(endpoint, {
       method: "POST",
@@ -687,9 +712,11 @@ STRICT DISTRICT LOCK:
     const json = await res.json();
     const rawReply = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
+    const shouldShowCards = Boolean(intent.detectedDistrict || intent.transitLine || intent.maxPrice);
+
     return {
       text: cleanText(rawReply),
-      recommendations: matchedListings
+      recommendations: shouldShowCards ? matchedListings : []
     };
   };
 
@@ -774,7 +801,7 @@ STRICT DISTRICT LOCK:
                   <Sparkles className="w-3.5 h-3.5 text-emerald-200"/>
                 </h4>
                 <p className="text-[11px] text-emerald-100 flex items-center gap-1">
-                  <span>{apiKey ? "Powered by Gemini 2.5 Flash" : "Bangkok Rental Guide"}</span>
+                  <span>{apiKey ? "Powered by Gemini 3.5 Flash" : "Bangkok Rental Guide"}</span>
                   {apiKey && <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" />}
                 </p>
               </div>
